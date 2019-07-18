@@ -1,8 +1,7 @@
-package com.videonote.Database;
+package com.videonote;
 
 public class Common {
-    public static final int DATABASE_VERSION = 2;
-    public static final String DATABASE_NAME = "videonote_db";
+    public static final String EOL = "\r\n";
     public static enum RECORD_TYPE {
         AUDIO,
         VIDEO
@@ -11,4 +10,5 @@ public class Common {
         TEXT,
         IMAGE
     }
+
 }

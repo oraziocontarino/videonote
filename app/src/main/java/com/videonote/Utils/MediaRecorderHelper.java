@@ -1,10 +1,10 @@
-package com.videonote.Utils;
+package com.videonote.utils;
 
 import android.content.Context;
 import android.media.MediaRecorder;
 import android.os.SystemClock;
 
-import com.videonote.Database.RecordDTO;
+import com.videonote.database.dto.RecordDTO;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -91,6 +91,19 @@ public class MediaRecorderHelper {
     public void initTime(){
         totalRecordingTime = 0L;
         startTime = SystemClock.uptimeMillis();
+    }
+
+    public void clean(){
+        if(totalRecordingTime != 0L){
+            if(recording) {
+                stopAudioRecording();
+            }else{
+                mediaRecorder.reset();
+            }
+        }
+        startTime = 0L;
+        totalRecordingTime = 0L;
+        recording = false;
     }
 
 }

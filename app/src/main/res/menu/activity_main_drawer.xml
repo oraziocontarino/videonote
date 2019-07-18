@@ -9,13 +9,21 @@
             android:icon="@drawable/ic_baseline_dashboard_24px"
             android:title="Dashboard" />
         <item
-            android:id="@+id/nav_audio"
+            android:id="@+id/nav_audio_player"
             android:icon="@drawable/ic_baseline_audiotrack_24px"
-            android:title="Record Audio" />
+            android:title="Audio player" />
         <item
-            android:id="@+id/nav_video"
+            android:id="@+id/nav_audio_recorder"
+            android:icon="@drawable/ic_baseline_mic_24px"
+            android:title="Audio recorder" />
+        <item
+            android:id="@+id/nav_video_player"
             android:icon="@drawable/ic_baseline_videocam_24px"
-            android:title="Record Video" />
+            android:title="Video player" />
+        <item
+            android:id="@+id/nav_video_recorder"
+            android:icon="@drawable/ic_baseline_video_call_24px"
+            android:title="Video recorder" />
         <item
             android:id="@+id/nav_exit"
             android:icon="@drawable/ic_baseline_exit_to_app_24px"

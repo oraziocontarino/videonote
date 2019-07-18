@@ -1,7 +1,7 @@
-package com.videonote.Database;
+package com.videonote.database.dto;
 
 public class RecordDTO {
-    private int id;
+    private long id;
     private String fileName;
     private String type;
 
@@ -13,17 +13,17 @@ public class RecordDTO {
         this.type = type;
     }
 
-    public RecordDTO(int id, String fileName, String type){
+    public RecordDTO(long id, String fileName, String type){
         this.id = id;
         this.fileName = fileName;
         this.type = type;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

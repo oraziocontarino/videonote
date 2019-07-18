@@ -1,7 +1,6 @@
-package com.videonote.Utils;
+package com.videonote.utils;
 
 import android.content.Context;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 

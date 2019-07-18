@@ -1,8 +1,8 @@
-package com.videonote.Database;
+package com.videonote.database.dto;
 
 public class NoteDTO {
-    private int id;
-    private int recordId;
+    private long id;
+    private long recordId;
     private String type;
     private long startTime;
     private String fileName;
@@ -10,7 +10,7 @@ public class NoteDTO {
     public NoteDTO(){
 
     }
-    public NoteDTO(int id, String fileName, long startTime, int recordId, String type){
+    public NoteDTO(long id, String fileName, long startTime, long recordId, String type){
         this.id = id;
         this.fileName = fileName;
         this.startTime = startTime;
@@ -18,17 +18,17 @@ public class NoteDTO {
         this.type = type;
     }
 
-    public NoteDTO(String fileName, long startTime, int recordId, String type){
+    public NoteDTO(String fileName, long startTime, long recordId, String type){
         this.fileName = fileName;
         this.startTime = startTime;
         this.recordId = recordId;
         this.type = type;
     }
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
     
@@ -48,11 +48,11 @@ public class NoteDTO {
         this.startTime = startTime;
     }
 
-    public int getRecordId() {
+    public long getRecordId() {
         return recordId;
     }
 
-    public void setRecordId(int recordId) {
+    public void setRecordId(long recordId) {
         this.recordId = recordId;
     }
 

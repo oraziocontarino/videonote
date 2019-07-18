@@ -1,4 +1,4 @@
-package com.videonote.fragments.audiorecording;
+package com.videonote.view.fragments.audio.recorder;
 
 import android.content.Context;
 import android.net.Uri;
@@ -12,24 +12,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.videonote.Database.NoteRepository;
-import com.videonote.Database.RecordRepository;
+import com.videonote.database.DatabaseManager;
+import com.videonote.database.repositories.RecordRepository;
 import com.videonote.R;
-import com.videonote.Utils.FileUtils;
-import com.videonote.Utils.MediaRecorderHelper;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import com.videonote.utils.FileUtils;
+import com.videonote.utils.MediaRecorderHelper;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AudioRecordingFragment.OnFragmentInteractionListener} interface
+ * {@link AudioRecorder.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AudioRecordingFragment#newInstance} factory method to
+ * Use the {@link AudioRecorder#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AudioRecordingFragment extends Fragment{
+public class AudioRecorder extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -42,14 +39,12 @@ public class AudioRecordingFragment extends Fragment{
     private Button pauseRecordingButton;
     private Button resumeRecordingButton;
     private AudioNoteList noteList;
-    private NoteRepository noteRepository;
     private RecordRepository recordRepository;
     private MediaRecorderHelper mediaRecorderHelper;
     private String statusLabel;
     private Handler handler;
     private Runnable handlerTask;
-
-    public AudioRecordingFragment() {
+    public AudioRecorder() {
         // Required empty public constructor
     }
 
@@ -62,9 +57,9 @@ public class AudioRecordingFragment extends Fragment{
      * @return A new instance of fragment AudioRecordingFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AudioRecordingFragment newInstance(String param1, String param2
+    public static AudioRecorder newInstance(String param1, String param2
     ) {
-        AudioRecordingFragment fragment = new AudioRecordingFragment();
+        AudioRecorder fragment = new AudioRecorder();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -76,15 +71,15 @@ public class AudioRecordingFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //if (getArguments() != null) {
-            //mParam1 = getArguments().getString(ARG_PARAM1);
-            //mParam2 = getArguments().getString(ARG_PARAM2);
+        //mParam1 = getArguments().getString(ARG_PARAM1);
+        //mParam2 = getArguments().getString(ARG_PARAM2);
         //}
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_audio_recording, container, false);
+        return inflater.inflate(R.layout.fragment_audio_recorder, container, false);
         // Inflate the layout for this fragment
     }
 
@@ -110,6 +105,7 @@ public class AudioRecordingFragment extends Fragment{
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        cleanFragment();
     }
 
     /**
@@ -126,6 +122,12 @@ public class AudioRecordingFragment extends Fragment{
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+    private void cleanFragment(){
+        handler.removeCallbacks(handlerTask);
+        status.setText("IDLE");
+        noteList.clean();
+        mediaRecorderHelper.clean();
+    }
 
     private void initFragment(){
         // Init view
@@ -133,8 +135,7 @@ public class AudioRecordingFragment extends Fragment{
         noteList = new AudioNoteList(this);
 
         // Init Database
-        noteRepository = new NoteRepository(getView().getContext());
-        recordRepository = new RecordRepository(getView().getContext());
+        recordRepository = DatabaseManager.getInstance(getContext()).getRecordRepository();
 
         // Init UI
         status = (TextView) getView().findViewById(R.id.audioRecordStatusValue);
@@ -142,9 +143,9 @@ public class AudioRecordingFragment extends Fragment{
         stopRecordingButton = (Button) getView().findViewById(R.id.audioRecordStopButton);
         pauseRecordingButton = (Button) getView().findViewById(R.id.audioRecordPauseButton);
         resumeRecordingButton = (Button) getView().findViewById(R.id.audioRecordResumeButton);
+        updateRecordingButton(true,false,false,false);
 
 
-        startRecordingButton.setVisibility(View.VISIBLE);
         startRecordingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -163,18 +164,16 @@ public class AudioRecordingFragment extends Fragment{
             }
         });
 
-        stopRecordingButton.setVisibility(View.GONE);
         stopRecordingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            // TODO: set audio length with info in totalRecordingTime
-            MediaRecorderHelper.getInstance(view.getContext()).stopAudioRecording();
-            statusLabel = "STOPPED";
-            updateRecordingButton(true,false,false,false);
+                // TODO: set audio length with info in totalRecordingTime
+                MediaRecorderHelper.getInstance(view.getContext()).stopAudioRecording();
+                statusLabel = "STOPPED";
+                updateRecordingButton(true,false,false,false);
             }
         });
 
-        pauseRecordingButton.setVisibility(View.GONE);
         pauseRecordingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -184,7 +183,6 @@ public class AudioRecordingFragment extends Fragment{
             }
         });
 
-        resumeRecordingButton.setVisibility(View.GONE);
         resumeRecordingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

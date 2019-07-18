@@ -1,4 +1,4 @@
-package com.videonote;
+package com.videonote.view;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,12 +14,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.videonote.fragments.HomeFragment;
-import com.videonote.fragments.audiorecording.AudioRecordingFragment;
+import com.videonote.R;
+import com.videonote.view.fragments.HomeFragment;
+import com.videonote.view.fragments.audio.player.AudioPlayer;
+import com.videonote.view.fragments.audio.recorder.AudioRecorder;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        AudioRecordingFragment.OnFragmentInteractionListener {
+        AudioRecorder.OnFragmentInteractionListener,
+        AudioPlayer.OnFragmentInteractionListener {
     private View navHeader;
 
     @Override
@@ -111,10 +114,16 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.nav_home:
                 fragment = new HomeFragment();
                 break;
-            case R.id.nav_audio:
-                fragment = new AudioRecordingFragment();
+            case R.id.nav_audio_player:
+                fragment = new AudioPlayer();
                 break;
-            case R.id.nav_video:
+            case R.id.nav_audio_recorder:
+                fragment = new AudioRecorder();
+                break;
+            case R.id.nav_video_player:
+                fragment = new HomeFragment();
+                break;
+            case R.id.nav_video_recorder:
                 fragment = new HomeFragment();
                 break;
             case R.id.nav_exit:

@@ -1,4 +1,4 @@
-package com.videonote.fragments.audiorecording;
+package com.videonote.view.fragments.audio.recorder;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -9,12 +9,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.videonote.Database.Common;
-import com.videonote.Database.NoteDTO;
-import com.videonote.Database.RecordDTO;
+import com.videonote.Common;
+import com.videonote.database.DatabaseManager;
+import com.videonote.database.dto.NoteDTO;
+import com.videonote.database.repositories.NoteRepository;
+import com.videonote.database.dto.RecordDTO;
 import com.videonote.R;
-import com.videonote.Utils.FileUtils;
-import com.videonote.Utils.MediaRecorderHelper;
+import com.videonote.utils.FileUtils;
+import com.videonote.utils.MediaRecorderHelper;
 
 public class AudioNoteList {
     private Fragment fragment;
@@ -25,8 +27,9 @@ public class AudioNoteList {
     private RecordDTO recordDTO;
     private EditText noteText;
     private EditText noteFile;
+    private NoteRepository noteRepository;
 
-    public AudioNoteList(Fragment fragment){
+    public AudioNoteList(final Fragment fragment){
         noteList = (LinearLayout) fragment.getView().findViewById(R.id.audioRecordNoteContainer);
         addTextNoteButton = (Button) fragment.getView().findViewById(R.id.audioRecordTextButton);
         addFileNoteButton = (Button) fragment.getView().findViewById(R.id.audioRecordFileButton);
@@ -34,26 +37,37 @@ public class AudioNoteList {
         noteFile = (EditText) fragment.getView().findViewById(R.id.audioRecordFileInput);
         noteDTO = new NoteDTO();
         recordDTO = new RecordDTO();
+        noteRepository = DatabaseManager.getInstance(fragment.getContext()).getNoteRepository();
         this.fragment = fragment;
 
         addTextNoteButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                noteDTO.setFileName(FileUtils.getUniqueName("text_note.txt"));
-                noteDTO.setRecordId(recordDTO.getId());
-                noteDTO.setStartTime(MediaRecorderHelper.getInstance(view.getContext()).getTime());
-                noteDTO.setType(Common.NOTE_TYPE.TEXT.name());
-                storeTextNote();
-                add();
+            updateTextNoteDTO(fragment.getView().getContext());
+            storeTextNoteToFile();
+            storeTextNoteToDB();
+            addTextNoteToList();
+            noteText.setText("");
             }
         });
     }
 
-    private void storeTextNote(){
+    private void updateTextNoteDTO(Context context){
+        noteDTO.setFileName(FileUtils.getUniqueName("text_note.txt"));
+        noteDTO.setRecordId(recordDTO.getId());
+        noteDTO.setStartTime(MediaRecorderHelper.getInstance(context).getTime());
+        noteDTO.setType(Common.NOTE_TYPE.TEXT.name());
+    }
+
+    private void storeTextNoteToFile(){
         String note = noteText.getText().toString();
         FileUtils.saveTextFile(fragment, noteDTO.getFileName(), note);
     }
 
-    private void add(){
+    private void storeTextNoteToDB(){
+        noteRepository.insert(noteDTO);
+    }
+
+    private void addTextNoteToList(){
         LinearLayout wrapper = new LinearLayout(fragment.getContext());
         wrapper.addView(generateLabel());
         wrapper.addView(generateButton(wrapper));
@@ -96,6 +110,9 @@ public class AudioNoteList {
         this.recordDTO.setFileName(fileName);
         this.recordDTO.setType(Common.RECORD_TYPE.AUDIO.name());
     }
+    public void updateRecordDTO(long id){
+        this.recordDTO.setId(id);
+    }
 
     public RecordDTO getRecordDTO(){
         return this.recordDTO;
@@ -105,5 +122,12 @@ public class AudioNoteList {
         addTextNoteButton.setEnabled(enabled);
         noteFile.setEnabled(enabled);
         addFileNoteButton.setEnabled(enabled);
+    }
+
+    public void clean(){
+        noteList.removeAllViewsInLayout();
+        noteText.setText("");
+        noteFile.setText("");
+        updateButtons(false);
     }
 }
