@@ -9,23 +9,23 @@ import com.videonote.database.dto.RecordDTO;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-public class MediaRecorderHelper {
-    private static MediaRecorderHelper instance = null;
+public class MediaRecorderManager {
+    private static MediaRecorderManager instance = null;
     private MediaRecorder mediaRecorder;
     private Context context;
     private Long startTime = 0L;
     private Long totalRecordingTime = 0L;
     private boolean recording;
 
-    private MediaRecorderHelper(Context context){
+    private MediaRecorderManager(Context context){
         this.context = context;
         mediaRecorder = new MediaRecorder();
         recording = false;
     }
 
-    public static MediaRecorderHelper getInstance(Context context){
+    public static MediaRecorderManager getInstance(Context context){
         if(instance == null){
-            instance = new MediaRecorderHelper(context);
+            instance = new MediaRecorderManager(context);
         }else{
             instance.setContext(context);
         }

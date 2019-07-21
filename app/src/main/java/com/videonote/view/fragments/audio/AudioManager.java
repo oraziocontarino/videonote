@@ -7,9 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.videonote.R;
-import com.videonote.utils.MediaRecorderHelper;
-
 public abstract class AudioManager {
     private Fragment fragment;
     private View view;

@@ -16,4 +16,10 @@
     <string name="permission_request">This sample needs permission for camera and audio recording.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
     <string name="intro_message">MOCK...INTRO MESSAGE.</string>
+
+    <string name="audio_player_record_title">Title</string>
+    <string name="audio_player_play">Play</string>
+    <string name="audio_player_delete">Delete</string>
+    <string name="audio_player_show_note_list">+</string>
+    <string name="audio_player_hide_note_list">-</string>
 </resources>

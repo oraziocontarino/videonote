@@ -85,15 +85,51 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/audioPlayerRecordsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/audioPlayerRecordsContainer">
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/table_button"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:text="My First Record! bla bla bla"
+                    android:textColor="@color/colorPrimaryText" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/table_button"
+                    android:src="@drawable/ic_baseline_play_arrow_24px" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/table_button"
+                    android:src="@drawable/ic_baseline_delete_forever_24px" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/table_button"
+                    android:src="@drawable/ic_baseline_unfold_more_24px" />
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
+
+
 
 </LinearLayout>

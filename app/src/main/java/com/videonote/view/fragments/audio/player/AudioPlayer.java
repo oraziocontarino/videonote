@@ -3,15 +3,12 @@ package com.videonote.view.fragments.audio.player;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.videonote.R;
-import com.videonote.view.fragments.audio.AudioManager;
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -22,7 +19,7 @@ import com.videonote.view.fragments.audio.AudioManager;
  */
 public class AudioPlayer extends Fragment {
     // Header UI - common to Recorder
-    private AudioManager header;
+    private AudioPlayerManager audioPlayerManager;
 
     private OnFragmentInteractionListener mListener;
 
@@ -65,9 +62,16 @@ public class AudioPlayer extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        audioPlayerManager.clean();
     }
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        audioPlayerManager = new AudioPlayerManager(this);
     }
 }

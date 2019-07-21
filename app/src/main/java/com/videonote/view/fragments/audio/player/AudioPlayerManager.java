@@ -1,4 +1,4 @@
-package com.videonote.view.fragments.audio.recorder;
+package com.videonote.view.fragments.audio.player;
 
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -8,29 +8,32 @@ import com.videonote.R;
 import com.videonote.database.DatabaseManager;
 import com.videonote.database.repositories.RecordRepository;
 import com.videonote.utils.FileUtils;
-import com.videonote.utils.MediaRecorderHelper;
+import com.videonote.utils.MediaPlayerManager;
+import com.videonote.utils.MediaRecorderManager;
 import com.videonote.view.fragments.audio.AudioManager;
+import com.videonote.view.fragments.audio.recorder.AudioRecorderList;
 
-import org.w3c.dom.NodeList;
+public class AudioPlayerManager extends AudioManager {
+    private MediaPlayerManager mediaPlayerManager;
+    //private RecordRepository recordRepository;
+    private AudioPlayerList recordList;
 
-public class RecorderManager extends AudioManager {
-    private MediaRecorderHelper mediaRecorderHelper;
-    private RecordRepository recordRepository;
-    private AudioNoteList noteList;
-
-    public RecorderManager(Fragment fragment){
-        super(fragment, R.id.audioRecordStatusValue, R.id.audioRecordStartButton, R.id.audioRecordStopButton, R.id.audioRecordPauseButton, R.id.audioRecordResumeButton);
+    public AudioPlayerManager(Fragment fragment){
+        super(fragment, R.id.audioPlayerStatusValue, R.id.audioPlayerStartButton, R.id.audioPlayerStopButton, R.id.audioPlayerPauseButton, R.id.audioPlayerResumeButton);
         // Init Database
-        recordRepository = DatabaseManager.getInstance(getContext()).getRecordRepository();
+        //recordRepository = DatabaseManager.getInstance(getContext()).getRecordRepository();
 
-        mediaRecorderHelper = MediaRecorderHelper.getInstance(getView().getContext());
+        mediaPlayerManager = MediaPlayerManager.getInstance(getView().getContext());
 
         // Init recording list
-        noteList = new AudioNoteList(fragment);
-        noteList.updateButtons(false);
+        recordList = new AudioPlayerList(fragment);
+        //noteList.updateButtons(false);
 
         updateButton(true,false,false,false);
         //List<RecordDTO> records = recordRepository.getAllRecordsByType(Common.RECORD_TYPE.AUDIO);
+
+        for(int i = 0; i<20; i++)
+            recordList.generateRow("Test record "+i);
     }
 
     @Override
@@ -39,11 +42,7 @@ public class RecorderManager extends AudioManager {
             @Override
             public void onClick(View view) {
                 try{
-                    noteList.updateRecordDTO(FileUtils.getFilePath(view.getContext(), "audio.3gp", true));
-                    mediaRecorderHelper.startAudioRecording(noteList.getRecordDTO());
-                    recordRepository.insert(noteList.getRecordDTO());
-                    noteList.updateButtons(true);
-                    statusLabel = "RECORDING";
+                    statusLabel = "PLAYING";
                     updateButton(false,true,true,false);
                 }catch(Exception e){
                     //TODO: print error message in toast notification
@@ -59,8 +58,7 @@ public class RecorderManager extends AudioManager {
         stopRecordingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: set audio length with info in totalRecordingTime
-                MediaRecorderHelper.getInstance(view.getContext()).stopAudioRecording();
+                mediaPlayerManager.stopAudioRecording();
                 statusLabel = "STOPPED";
                 updateButton(true,false,false,false);
             }
@@ -72,7 +70,7 @@ public class RecorderManager extends AudioManager {
         pauseRecordingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MediaRecorderHelper.getInstance(view.getContext()).pauseAudioRecording();
+                mediaPlayerManager.pauseAudioRecording();
                 statusLabel = "PAUSED";
                 updateButton(false,true,false,true);
             }
@@ -83,7 +81,7 @@ public class RecorderManager extends AudioManager {
         resumeRecordingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mediaRecorderHelper.resumeAudioRecording();
+                mediaPlayerManager.resumeAudioRecording();
                 statusLabel = "RECORDING";
                 updateButton(false,true,true,false);
             }
@@ -93,12 +91,12 @@ public class RecorderManager extends AudioManager {
     @Override
     protected void clean(){
         super.clean();
-        mediaRecorderHelper.clean();
-        noteList.clean();
+        mediaPlayerManager.clean();
+        recordList.clean();
     }
 
     @Override
     protected void updateHeaderTime(){
-        headerTime = mediaRecorderHelper == null ? "": mediaRecorderHelper.getFormattedTime()+" - "+statusLabel;
+        headerTime = mediaPlayerManager == null ? "": mediaPlayerManager.getFormattedTime()+" - "+statusLabel;
     }
 }

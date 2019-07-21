@@ -16,9 +16,9 @@ import com.videonote.database.repositories.NoteRepository;
 import com.videonote.database.dto.RecordDTO;
 import com.videonote.R;
 import com.videonote.utils.FileUtils;
-import com.videonote.utils.MediaRecorderHelper;
+import com.videonote.utils.MediaRecorderManager;
 
-public class AudioNoteList {
+public class AudioRecorderList {
     private Fragment fragment;
     private LinearLayout noteList;
     private Button addTextNoteButton;
@@ -29,7 +29,7 @@ public class AudioNoteList {
     private EditText noteFile;
     private NoteRepository noteRepository;
 
-    public AudioNoteList(final Fragment fragment){
+    public AudioRecorderList(final Fragment fragment){
         noteList = (LinearLayout) fragment.getView().findViewById(R.id.audioRecordNoteContainer);
         addTextNoteButton = (Button) fragment.getView().findViewById(R.id.audioRecordTextButton);
         addFileNoteButton = (Button) fragment.getView().findViewById(R.id.audioRecordFileButton);
@@ -54,7 +54,7 @@ public class AudioNoteList {
     private void updateTextNoteDTO(Context context){
         noteDTO.setFileName(FileUtils.getUniqueName("text_note.txt"));
         noteDTO.setRecordId(recordDTO.getId());
-        noteDTO.setStartTime(MediaRecorderHelper.getInstance(context).getTime());
+        noteDTO.setStartTime(MediaRecorderManager.getInstance(context).getTime());
         noteDTO.setType(Common.NOTE_TYPE.TEXT.name());
     }
 
