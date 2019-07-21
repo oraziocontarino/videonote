@@ -29,7 +29,7 @@
                 android:width="2dp"
                 android:color="@color/colorPrimaryDark" />
             <corners
-                android:radius="3dp" />
+                android:radius="0dp" />
             <padding
                 android:left="10dp"
                 android:top="10dp"
