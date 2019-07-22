@@ -49,12 +49,12 @@ public class NoteRepository extends Repository<NoteDTO> {
         note.setId(id);
     }
 
-    public List<NoteDTO> getByRecordId(String recordId) {
+    public List<NoteDTO> getByRecordId(Long recordId) {
         // get readable database as we are not inserting anything
         SQLiteDatabase db = _this.getReadableDatabase();
         String selectQuery = "SELECT  * "   +
                              "FROM "        + TABLE_NAME        + " " +
-                             "WHERE "       + RECORD_ID.getName()  + " = " + recordId +
+                             "WHERE "       + RECORD_ID.getName()  + " = " + recordId + " " +
                              "ORDER BY "    + RECORD_ID.getName()  + " DESC ";
         Log.d(LOG_PREFIX, selectQuery);
 

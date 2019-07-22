@@ -1,8 +1,10 @@
 package com.videonote.utils;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.videonote.database.dto.RecordDTO;
 
@@ -11,16 +13,12 @@ import java.util.concurrent.TimeUnit;
 
 public class MediaPlayerManager {
     private static MediaPlayerManager instance = null;
-    private MediaRecorder mediaRecorder;
+    private MediaPlayer mediaPlayer;
     private Context context;
-    private Long startTime = 0L;
-    private Long totalRecordingTime = 0L;
-    private boolean recording;
 
     private MediaPlayerManager(Context context){
         this.context = context;
-        mediaRecorder = new MediaRecorder();
-        recording = false;
+        mediaPlayer = new MediaPlayer();
     }
 
     public static MediaPlayerManager getInstance(Context context){
@@ -34,43 +32,30 @@ public class MediaPlayerManager {
     private void setContext(Context context){
         this.context = context;
     }
-    public void startAudioRecording(RecordDTO record) throws Exception{
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        mediaRecorder.setOutputFile(record.getFileName());
-        mediaRecorder.prepare();
-        mediaRecorder.start();   // Recording is now started
-        recording = true;
-        initTime();
+    public void startAudioPlayer(RecordDTO record) throws Exception{
+        mediaPlayer.setDataSource(record.getFileName());
+        mediaPlayer.prepare();
+        mediaPlayer.start();
     }
 
-    public void pauseAudioRecording(){
-        startTime = 0L;
-        recording = false;
+    public void pauseAudioPlayer(){
+        mediaPlayer.pause();
     }
 
-    public void resumeAudioRecording(){
-        startTime = SystemClock.uptimeMillis();
-        recording = true;
+    public void resumeAudioPlayer(){
+        mediaPlayer.start();
     }
-    public void stopAudioRecording(){
-        mediaRecorder.stop();
-        recording = false;
-        mediaRecorder.reset();   // You can reuse the object by going back to setAudioSource() step
+    public void stopAudioPlayer(){
+        mediaPlayer.stop();
+        mediaPlayer.reset();   // You can reuse the object by going back to setAudioSource() step
     }
 
     public void destroy(){
-        mediaRecorder.release(); // Now the object cannot be reused
-    }
-
-    public long getTime(){
-        updateTime();
-        return totalRecordingTime;
+        mediaPlayer.release(); // Now the object cannot be reused
     }
 
     public String getFormattedTime(){
-        long millis = getTime();
+        long millis = mediaPlayer.getCurrentPosition();
         String time = String.format(Locale.ITALY, "%02d:%02d:%02d",
                 TimeUnit.MILLISECONDS.toHours(millis),
                 TimeUnit.MILLISECONDS.toMinutes(millis) -
@@ -81,29 +66,14 @@ public class MediaPlayerManager {
         return String.valueOf(time);
     }
 
-    public void updateTime(){
-        if(recording){
-            totalRecordingTime += SystemClock.uptimeMillis() - startTime;
-            startTime = SystemClock.uptimeMillis();
-        }
-    }
-
-    public void initTime(){
-        totalRecordingTime = 0L;
-        startTime = SystemClock.uptimeMillis();
-    }
-
     public void clean(){
-        if(totalRecordingTime != 0L){
-            if(recording) {
-                stopAudioRecording();
+        if(mediaPlayer.getCurrentPosition() != 0L){
+            if(mediaPlayer.isPlaying()) {
+                stopAudioPlayer();
             }else{
-                mediaRecorder.reset();
+                mediaPlayer.reset();
             }
         }
-        startTime = 0L;
-        totalRecordingTime = 0L;
-        recording = false;
     }
 
 }

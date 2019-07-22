@@ -30,6 +30,13 @@ public class RecordDTO {
     public String getFileName() {
         return fileName;
     }
+    public String getFileName(boolean last){
+        if(last){
+            String[] pieces = getFileName().split("/");
+            return pieces[pieces.length-1];
+        }
+        return getFileName();
+    }
 
     public void setFileName(String fileName) {
         this.fileName = fileName;

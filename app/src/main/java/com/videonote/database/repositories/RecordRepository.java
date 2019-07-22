@@ -83,7 +83,7 @@ public class RecordRepository extends Repository<RecordDTO>{
         return data;
     }
 
-    public List<RecordDTO> getByType(SQLiteOpenHelper _this, Common.RECORD_TYPE type) {
+    public List<RecordDTO> getByType(Common.RECORD_TYPE type) {
         SQLiteDatabase db = _this.getWritableDatabase();
         List<RecordDTO> records = new ArrayList<>();
 

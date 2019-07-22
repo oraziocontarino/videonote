@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.videonote.database.dto.RecordDTO;
+
 public abstract class AudioManager {
     private Fragment fragment;
     private View view;
@@ -16,18 +18,18 @@ public abstract class AudioManager {
     protected String headerTime;
     protected Handler handler;
     protected Runnable handlerTask;
-    protected Button startRecordingButton;
-    protected Button stopRecordingButton;
-    protected Button pauseRecordingButton;
-    protected Button resumeRecordingButton;
+    protected Button startButton;
+    protected Button stopButton;
+    protected Button pauseButton;
+    protected Button resumeButton;
 
     public AudioManager(Fragment fragment, int statusId, int startButtonId, int stopButtonId, int pauseButtonId, int resumeButtonId){
         this.fragment = fragment;
         status = (TextView) getView().findViewById(statusId);
-        startRecordingButton = (Button) getView().findViewById(startButtonId);
-        stopRecordingButton = (Button) getView().findViewById(stopButtonId);
-        pauseRecordingButton = (Button) getView().findViewById(pauseButtonId);
-        resumeRecordingButton = (Button) getView().findViewById(resumeButtonId);
+        startButton = (Button) getView().findViewById(startButtonId);
+        stopButton = (Button) getView().findViewById(stopButtonId);
+        pauseButton = (Button) getView().findViewById(pauseButtonId);
+        resumeButton = (Button) getView().findViewById(resumeButtonId);
         statusLabel = "IDLE";
 
         startButtonHandler();
@@ -38,7 +40,6 @@ public abstract class AudioManager {
         // Start time updater
         updateStatus();
     }
-
     protected void clean(){
         handler.removeCallbacks(handlerTask);
         status.setText("IDLE");
@@ -53,10 +54,10 @@ public abstract class AudioManager {
     }
 
     protected void updateButton(boolean start, boolean stop, boolean pause, boolean resume){
-        startRecordingButton.setVisibility(start ? View.VISIBLE : View.GONE);
-        stopRecordingButton.setVisibility(stop ? View.VISIBLE : View.GONE);
-        pauseRecordingButton.setVisibility(pause ? View.VISIBLE : View.GONE);
-        resumeRecordingButton.setVisibility(resume ? View.VISIBLE : View.GONE);
+        startButton.setVisibility(start ? View.VISIBLE : View.GONE);
+        stopButton.setVisibility(stop ? View.VISIBLE : View.GONE);
+        pauseButton.setVisibility(pause ? View.VISIBLE : View.GONE);
+        resumeButton.setVisibility(resume ? View.VISIBLE : View.GONE);
     }
 
     protected void updateStatus(){
@@ -73,9 +74,48 @@ public abstract class AudioManager {
         handlerTask.run();
     }
 
-    protected abstract void startButtonHandler();
-    protected abstract void stopButtonHandler();
-    protected abstract void pauseButtonHandler();
-    protected abstract void resumeButtonHandler();
+    private void startButtonHandler() {
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startAction();
+            }
+        });
+    }
+    private void stopButtonHandler(){
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopAction();
+            }
+        });
+    }
+
+    private void pauseButtonHandler(){
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pauseAction();
+            }
+        });
+    }
+
+    private void resumeButtonHandler(){
+        resumeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resumeAction();
+            }
+        });
+    }
+
+    protected abstract void startAction(RecordDTO record);
+    protected abstract void startAction();
+    protected abstract void stopAction();
+    protected abstract void pauseAction();
+    protected abstract void resumeAction();
     protected abstract void updateHeaderTime();
+
+
+
 }

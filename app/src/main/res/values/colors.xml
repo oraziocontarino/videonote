@@ -7,4 +7,5 @@
     <color name="colorPrimaryText">#CCC</color>
     <color name="colorPrimaryTextPressed">#555</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorTransparent">#00000000</color>
 </resources>
