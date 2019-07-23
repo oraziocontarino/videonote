@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.videonote.R;
 import com.videonote.database.dto.RecordDTO;
 
 public abstract class AudioManager {
@@ -14,6 +15,7 @@ public abstract class AudioManager {
     private View view;
     // UI
     protected TextView status;
+    protected TextView recordName;
     protected String statusLabel;
     protected String headerTime;
     protected Handler handler;
@@ -23,9 +25,10 @@ public abstract class AudioManager {
     protected Button pauseButton;
     protected Button resumeButton;
 
-    public AudioManager(Fragment fragment, int statusId, int startButtonId, int stopButtonId, int pauseButtonId, int resumeButtonId){
+    public AudioManager(Fragment fragment, int recordId, int statusId, int startButtonId, int stopButtonId, int pauseButtonId, int resumeButtonId){
         this.fragment = fragment;
         status = (TextView) getView().findViewById(statusId);
+        recordName = getView().findViewById(recordId);
         startButton = (Button) getView().findViewById(startButtonId);
         stopButton = (Button) getView().findViewById(stopButtonId);
         pauseButton = (Button) getView().findViewById(pauseButtonId);
@@ -68,6 +71,7 @@ public abstract class AudioManager {
             public void run() {
                 updateHeaderTime();
                 status.setText(headerTime);
+                hookInterval();
                 handler.postDelayed(handlerTask, 100);
             }
         };
@@ -115,6 +119,7 @@ public abstract class AudioManager {
     protected abstract void pauseAction();
     protected abstract void resumeAction();
     protected abstract void updateHeaderTime();
+    protected abstract void hookInterval();
 
 
 

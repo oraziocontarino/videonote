@@ -1,8 +1,5 @@
 package com.videonote.view.fragments.audio.player.list;
 
-import android.content.Context;
-import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
@@ -14,7 +11,6 @@ import android.widget.Toast;
 
 import com.videonote.R;
 import com.videonote.database.dto.RecordDTO;
-import com.videonote.utils.MediaPlayerManager;
 import com.videonote.view.fragments.audio.player.AudioPlayerManager;
 
 public class AudioPlayerListRowHeader extends LinearLayout {
@@ -117,7 +113,7 @@ public class AudioPlayerListRowHeader extends LinearLayout {
 
         TextView title = new TextView(getContext());
         title.setLayoutParams(entryLayout);
-        title.setBackgroundResource(R.drawable.table_button);
+        title.setBackgroundResource(R.drawable.table_primary);
         title.setEms(10);
         title.setGravity(Gravity.CENTER);
         title.setText(titleText);
@@ -131,7 +127,7 @@ public class AudioPlayerListRowHeader extends LinearLayout {
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
         final ImageButton button = new ImageButton(getContext());
-        button.setBackgroundResource(R.drawable.table_button);
+        button.setBackgroundResource(R.drawable.table_primary);
         button.setImageResource(entryImage);
         button.setClickable(true);
         return button;

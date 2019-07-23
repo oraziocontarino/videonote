@@ -18,7 +18,7 @@ public class AudioRecorderManager extends AudioManager {
     private AudioRecorderList noteList;
 
     public AudioRecorderManager(Fragment fragment){
-        super(fragment, R.id.audioRecordStatusValue, R.id.audioRecordStartButton, R.id.audioRecordStopButton, R.id.audioRecordPauseButton, R.id.audioRecordResumeButton);
+        super(fragment, R.id.audioRecordStatusLabel, R.id.audioRecordStatusValue, R.id.audioRecordStartButton, R.id.audioRecordStopButton, R.id.audioRecordPauseButton, R.id.audioRecordResumeButton);
         // Init Database
         recordRepository = DatabaseManager.getInstance(getContext()).getRecordRepository();
 
@@ -80,5 +80,10 @@ public class AudioRecorderManager extends AudioManager {
     @Override
     protected void updateHeaderTime(){
         headerTime = mediaRecorderManager == null ? "": mediaRecorderManager.getFormattedTime()+" - "+statusLabel;
+    }
+
+    @Override
+    protected void hookInterval(){
+
     }
 }

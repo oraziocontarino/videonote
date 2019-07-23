@@ -54,8 +54,15 @@ public class MediaPlayerManager {
         mediaPlayer.release(); // Now the object cannot be reused
     }
 
+    public long getTime(){
+        return mediaPlayer.getCurrentPosition();
+    }
+
     public String getFormattedTime(){
         long millis = mediaPlayer.getCurrentPosition();
+        return getFormattedTime(millis);
+    }
+    public static String getFormattedTime(long millis){
         String time = String.format(Locale.ITALY, "%02d:%02d:%02d",
                 TimeUnit.MILLISECONDS.toHours(millis),
                 TimeUnit.MILLISECONDS.toMinutes(millis) -

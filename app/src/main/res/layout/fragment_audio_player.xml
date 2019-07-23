@@ -29,19 +29,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-        <TextView
-            android:id="@+id/audioPlayerTextNote"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:ems="10" />
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
 
         <Button
             android:id="@+id/audioPlayerStartButton"
@@ -77,12 +64,42 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_weight="0"
+        android:background="@color/colorTransparent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <TextView
+                android:id="@+id/textAttachment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="60"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"/>
+            <ImageView
+                android:id="@+id/imageAttachment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="40"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="Image row 1. \n" />
+        </LinearLayout>
+    </ScrollView>
+    <View
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:layout_weight="0"
         android:background="@color/colorTransparent" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -92,7 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-<!--
+<!-- - ->
             <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -106,7 +123,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@drawable/table_button"
+                        android:background="@drawable/table_primary"
                         android:ems="10"
                         android:gravity="center"
                         android:text="My First Record! bla bla bla"
@@ -115,81 +132,94 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:background="@drawable/table_button"
+                        android:background="@drawable/table_primary"
                         android:src="@drawable/ic_baseline_play_arrow_24px" />
 
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:background="@drawable/table_button"
+                        android:background="@drawable/table_primary"
                         android:src="@drawable/ic_baseline_delete_forever_24px" />
 
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:background="@drawable/table_button"
+                        android:background="@drawable/table_primary"
                         android:src="@drawable/ic_baseline_unfold_more_24px" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@drawable/table_button"
+                        android:background="@drawable/table_secondary"
                         android:ems="10"
                         android:gravity="center"
                         android:text="Description"
-                        android:textColor="@color/colorPrimaryText" />
+                        android:textColor="@color/colorSecondaryText" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@drawable/table_button"
+                        android:background="@drawable/table_secondary"
                         android:ems="10"
                         android:gravity="center"
                         android:text="Nota 1"
-                        android:textColor="@color/colorPrimaryText" />
+                        android:textColor="@color/colorSecondaryText" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:weightSum="100">
                     <TextView
-                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/table_button"
+                        android:layout_width="match_parent"
+                        android:layout_weight="30"
+                        android:background="@drawable/table_secondary"
                         android:ems="10"
                         android:gravity="center"
                         android:text="Time"
-                        android:textColor="@color/colorPrimaryText" />
+                        android:textColor="@color/colorSecondaryText" />
                     <TextView
-                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/table_button"
+                        android:layout_width="match_parent"
+                        android:layout_weight="70"
+                        android:background="@drawable/table_secondary"
                         android:ems="10"
                         android:gravity="center"
                         android:text="00:00:00"
-                        android:textColor="@color/colorPrimaryText" />
+                        android:textColor="@color/colorSecondaryText" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
 
-                    <ImageButton
+                    <Button
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/table_button"
-                        android:src="@drawable/ic_baseline_delete_forever_24px" />
+                        android:background="@drawable/table_secondary"
+                        android:text="ciao mondo"
+                        android:drawableLeft="" />
                 </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_weight="0"
+                    android:background="@color/colorTransparent" />
             </LinearLayout>
-            -->
+            <!- -   -->
         </LinearLayout>
     </ScrollView>
 

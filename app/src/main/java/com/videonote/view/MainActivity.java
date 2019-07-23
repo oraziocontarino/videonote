@@ -32,27 +32,6 @@ public class MainActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /*
-                NoteRepository db = new NoteRepository(MainActivity.this);
-                Log.d("MAIN_ACTIVITY", db.getAllDatas().toString());
-                long id = db.insert(new NoteDTO("1563107207070_1563107207069_text_note.txt", "30", "MOCK_NONE", "AUDIO"));
-                NoteDTO test = db.getData(id);
-                Log.d("MAIN_ACTIVITY", "retrived: "+test.toString());
-                */
-
-                /*
-                Snackbar.make(view, recording ? "Stopping registration" : "Starting registration...", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
-                boolean operation = recording ? stopRecording() : startRecording();
-                */
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

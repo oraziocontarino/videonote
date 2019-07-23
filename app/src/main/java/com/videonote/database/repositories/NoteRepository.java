@@ -18,8 +18,14 @@ public class NoteRepository extends Repository<NoteDTO> {
 
     private static final TableColumn FILE_NAME = new TableColumn("fileName", "TEXT");
 
+    private static final TableColumn TYPE = new TableColumn("type", "TEXT");
+
     private static final TableColumn START_TIME_MS = new TableColumn("startTimeMs", "TEXT");
 
+    private static enum TYPE_VALUES {
+        TEXT,
+        IMAGE
+    }
     public NoteRepository(SQLiteOpenHelper _this) {
         super(_this, "notes_table");
         //super(context, Common.DATABASE_NAME, null, Common.DATABASE_VERSION);
@@ -28,7 +34,7 @@ public class NoteRepository extends Repository<NoteDTO> {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(
-            generateCreateTableSql(ID, RECORD_ID, FILE_NAME, START_TIME_MS)
+            generateCreateTableSql(ID, RECORD_ID, FILE_NAME, TYPE, START_TIME_MS)
         );
     }
 
@@ -38,12 +44,14 @@ public class NoteRepository extends Repository<NoteDTO> {
         onCreate(sqLiteDatabase);
     }
 
+    @Override
     public void insert(NoteDTO note){
         SQLiteDatabase db = _this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(RECORD_ID.getName(), note.getRecordId());
         cv.put(FILE_NAME.getName(), note.getFileName());
         cv.put(START_TIME_MS.getName(), note.getStartTime());
+        cv.put(TYPE.getName(), note.getType());
         long id = db.insert(TABLE_NAME,null, cv);
         db.close();
         note.setId(id);
@@ -55,7 +63,7 @@ public class NoteRepository extends Repository<NoteDTO> {
         String selectQuery = "SELECT  * "   +
                              "FROM "        + TABLE_NAME        + " " +
                              "WHERE "       + RECORD_ID.getName()  + " = " + recordId + " " +
-                             "ORDER BY "    + RECORD_ID.getName()  + " DESC ";
+                             "ORDER BY "    + RECORD_ID.getName()  + " ASC ";
         Log.d(LOG_PREFIX, selectQuery);
 
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -66,6 +74,7 @@ public class NoteRepository extends Repository<NoteDTO> {
                 NoteDTO data = new NoteDTO();
                 data.setId(cursor.getInt(cursor.getColumnIndex(ID.getName())));
                 data.setFileName(cursor.getString(cursor.getColumnIndex(FILE_NAME.getName())));
+                data.setType(cursor.getString(cursor.getColumnIndex(TYPE.getName())));
                 data.setStartTime(cursor.getLong(cursor.getColumnIndex(START_TIME_MS.getName())));
                 results.add(data);
             } while (cursor.moveToNext());
