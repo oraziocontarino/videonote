@@ -15,10 +15,12 @@ public class MediaPlayerManager {
     private static MediaPlayerManager instance = null;
     private MediaPlayer mediaPlayer;
     private Context context;
-
+    private boolean dirty;
+    private boolean paused;
     private MediaPlayerManager(Context context){
         this.context = context;
         mediaPlayer = new MediaPlayer();
+        dirty = false;
     }
 
     public static MediaPlayerManager getInstance(Context context){
@@ -36,20 +38,35 @@ public class MediaPlayerManager {
         mediaPlayer.setDataSource(record.getFileName());
         mediaPlayer.prepare();
         mediaPlayer.start();
+        dirty = true;
     }
 
     public void pauseAudioPlayer(){
         mediaPlayer.pause();
+        paused = true;
     }
 
     public void resumeAudioPlayer(){
         mediaPlayer.start();
+        paused = false;
     }
     public void stopAudioPlayer(){
         mediaPlayer.stop();
         mediaPlayer.reset();   // You can reuse the object by going back to setAudioSource() step
+        dirty = false;
+        paused = false;
     }
-
+    public void resetAudioPlayer(){
+        mediaPlayer.reset();   // You can reuse the object by going back to setAudioSource() step
+        dirty = false;
+        paused = false;
+    }
+    public boolean isDirty(){
+        return dirty;
+    }
+    public boolean isPaused(){
+        return paused;
+    }
     public void destroy(){
         mediaPlayer.release(); // Now the object cannot be reused
     }
@@ -81,6 +98,10 @@ public class MediaPlayerManager {
                 mediaPlayer.reset();
             }
         }
+    }
+
+    public boolean isPlaying(){
+        return mediaPlayer.isPlaying();
     }
 
 }

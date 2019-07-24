@@ -9,6 +9,8 @@ import com.videonote.database.dto.NoteDTO;
 import com.videonote.database.TableColumn;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class NoteRepository extends Repository<NoteDTO> {
@@ -62,14 +64,14 @@ public class NoteRepository extends Repository<NoteDTO> {
         SQLiteDatabase db = _this.getReadableDatabase();
         String selectQuery = "SELECT  * "   +
                              "FROM "        + TABLE_NAME        + " " +
-                             "WHERE "       + RECORD_ID.getName()  + " = " + recordId + " " +
-                             "ORDER BY "    + RECORD_ID.getName()  + " ASC ";
+                             "WHERE "       + RECORD_ID.getName()  + " = " + recordId + " ";
         Log.d(LOG_PREFIX, selectQuery);
 
         Cursor cursor = db.rawQuery(selectQuery, null);
         List<NoteDTO> results = new ArrayList<NoteDTO>();
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
+
             do {
                 NoteDTO data = new NoteDTO();
                 data.setId(cursor.getInt(cursor.getColumnIndex(ID.getName())));
@@ -82,6 +84,13 @@ public class NoteRepository extends Repository<NoteDTO> {
         // close db connection
         db.close();
         // return notes list
+
+        Collections.sort(results, new Comparator<NoteDTO>() {
+            public int compare(NoteDTO arg0, NoteDTO arg1) {
+                Long delta = arg1.getStartTime() - arg0.getStartTime();
+                return delta.intValue();
+            }
+        });
         return results;
     }
 /*

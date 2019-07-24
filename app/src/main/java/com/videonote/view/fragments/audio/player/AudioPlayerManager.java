@@ -1,9 +1,11 @@
 package com.videonote.view.fragments.audio.player;
 
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import com.videonote.view.fragments.audio.player.list.AudioPlayerListRow;
 import org.w3c.dom.Text;
 
 import java.util.List;
+import java.util.Stack;
 
 public class AudioPlayerManager extends AudioManager {
     private Fragment fragment;
@@ -30,21 +33,29 @@ public class AudioPlayerManager extends AudioManager {
     private NoteRepository noteRepository;
     private LinearLayout recordsList;
 
-    private List<NoteDTO> currentRecordNotes;
+    private List<NoteDTO> currentRecordNotesList;
+    private Stack<NoteDTO> currentRecordNotesStack;
+    private NoteDTO nextNote;
     private TextView textAttachment;
     private ImageView imageAttachment;
-    private NoteDTO currentNote;
+    private ScrollView attachments;
 
 
     public AudioPlayerManager(Fragment fragment){
         super(fragment, R.id.audioPlayerStatusLabel, R.id.audioPlayerStatusValue, R.id.audioPlayerStartButton, R.id.audioPlayerStopButton, R.id.audioPlayerPauseButton, R.id.audioPlayerResumeButton);
         this.fragment = fragment;
-        this.currentNote = null;
+
+        // Init mediaplayer note
+        this.currentRecordNotesList = null;
+        this.currentRecordNotesStack = null;
+        this.nextNote = null;
+
         // Init Database
         recordRepository = DatabaseManager.getInstance(getContext()).getRecordRepository();
 
         mediaPlayerManager = MediaPlayerManager.getInstance(getView().getContext());
         noteRepository = DatabaseManager.getInstance(getContext()).getNoteRepository();
+        attachments = getView().findViewById(R.id.attachments);
         textAttachment = getView().findViewById(R.id.textAttachment);
         imageAttachment = getView().findViewById(R.id.imageAttachment);
         // Init recording list
@@ -59,11 +70,16 @@ public class AudioPlayerManager extends AudioManager {
     @Override
     public void startAction(RecordDTO record) {
         try{
-            currentRecordNotes = noteRepository.getByRecordId(record.getId());
+            currentRecordNotesList = noteRepository.getByRecordId(record.getId());
+            currentRecordNotesStack = new Stack<>();
+            for(NoteDTO note : currentRecordNotesList){
+                currentRecordNotesStack.push(note);
+            }
             mediaPlayerManager.startAudioPlayer(record);
             startAction();
         }catch (Exception e){
-
+            Log.e("AUDIO", e.getMessage());
+            e.printStackTrace();
         }
     }
     @Override
@@ -87,7 +103,7 @@ public class AudioPlayerManager extends AudioManager {
     public void pauseAction() {
         try{
             mediaPlayerManager.pauseAudioPlayer();
-            statusLabel = "STOPPED";
+            statusLabel = "PAUSED";
             updateButton(false,true,false,true);
         }catch (Exception e){
             //...
@@ -118,25 +134,37 @@ public class AudioPlayerManager extends AudioManager {
 
     @Override
     protected void hookInterval(){
-        NoteDTO selected = null;
-        if(currentRecordNotes == null){
+        if(mediaPlayerManager == null){
             return;
-        }
-        for(NoteDTO note : currentRecordNotes){
-            if(selected == null || note.getStartTime() < selected.getStartTime()){
-                selected = note;
-            }
-            break;
         }
 
-        if(selected == currentNote){
+        if(!mediaPlayerManager.isPlaying() && !mediaPlayerManager.isPaused() && mediaPlayerManager.isDirty()){
+            nextNote = null;
+            textAttachment.setText("");
+            attachments.setVisibility(View.GONE);
+            textAttachment.setVisibility(View.GONE);
+            mediaPlayerManager.resetAudioPlayer();
+            updateButton(false,false,false,false);
+        }
+
+        if(currentRecordNotesStack == null || (currentRecordNotesStack.size() == 0 && nextNote == null)){
             return;
         }
-        currentNote = selected;
-        if(currentNote.getType().equals(Common.NOTE_TYPE.TEXT.name())){
+        if(nextNote == null){
+            nextNote = currentRecordNotesStack.pop();
+        }
+
+        if(nextNote.getStartTime() > mediaPlayerManager.getTime()){
+            return;
+        }
+
+        if(nextNote.getType().equals(Common.NOTE_TYPE.TEXT.name())){
             Toast.makeText(getContext(), "Update note top box!", Toast.LENGTH_SHORT).show();
-            String text = FileUtils.readTextFile(fragment, currentNote.getFileName());
+            String text = FileUtils.readTextFile(fragment, nextNote.getFileName());
             textAttachment.setText(text);
+            nextNote = null;
+            attachments.setVisibility(View.VISIBLE);
+            textAttachment.setVisibility(View.VISIBLE);
         }
     }
     private void initRecordsList(){

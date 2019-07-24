@@ -70,11 +70,14 @@
         android:background="@color/colorTransparent" />
 
     <ScrollView
+        android:id="@+id/attachments"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="200dp"
+        android:visibility="gone">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
             android:weightSum="100">
 
@@ -82,17 +85,19 @@
                 android:id="@+id/textAttachment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="60"
+                android:layout_weight="100"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp"/>
+                android:paddingRight="20dp"
+                android:visibility="gone" />
+
             <ImageView
                 android:id="@+id/imageAttachment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="40"
+                android:layout_weight="100"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:text="Image row 1. \n" />
+                android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
     <View
