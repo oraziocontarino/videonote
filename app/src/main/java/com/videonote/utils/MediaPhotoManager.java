@@ -1,4 +1,4 @@
-package com.videonote.cameratest;
+package com.videonote.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -45,8 +45,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AudioNoteCameraManager {
-    private static final String TAG = "AndroidCameraApi";
+public class MediaPhotoManager {
     private Button takePictureButton;
     private TextureView textureView;
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
@@ -72,9 +71,9 @@ public class AudioNoteCameraManager {
     }
     private Fragment fragment;
 
-    public AudioNoteCameraManager(Fragment fragment){
+    public MediaPhotoManager(Fragment fragment){
         this.fragment = fragment;
-        textureView = (TextureView) getView().findViewById(R.id.cameraPreviewTextureView);
+        textureView = getView().findViewById(R.id.cameraPreviewTextureView);
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
         takePictureButton = (Button) getView().findViewById(R.id.cameraCaptureButton);
@@ -107,7 +106,6 @@ public class AudioNoteCameraManager {
         @Override
         public void onOpened(CameraDevice camera) {
             //This is called when the camera is open
-            Log.e(TAG, "onOpened");
             cameraDevice = camera;
             createCameraPreview();
         }
@@ -151,7 +149,6 @@ public class AudioNoteCameraManager {
 
     public void takePicture() {
         if (null == cameraDevice) {
-            Log.e(TAG, "cameraDevice is null");
             return;
         }
         CameraManager manager = (CameraManager) getContext().getSystemService(Context.CAMERA_SERVICE);
@@ -270,8 +267,8 @@ public class AudioNoteCameraManager {
     }
 
     public void openCamera() {
+        textureView.setVisibility(View.VISIBLE);
         CameraManager manager = (CameraManager) getContext().getSystemService(Context.CAMERA_SERVICE);
-        Log.e(TAG, "is camera open");
         try {
             cameraId = manager.getCameraIdList()[0];
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
@@ -287,12 +284,11 @@ public class AudioNoteCameraManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.e(TAG, "openCamera X");
     }
+
 
     protected void updatePreview() {
         if (null == cameraDevice) {
-            Log.e(TAG, "updatePreview error, return");
         }
         captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
         try {
@@ -302,7 +298,8 @@ public class AudioNoteCameraManager {
         }
     }
 
-    private void closeCamera() {
+    public void closeCamera() {
+        textureView.setVisibility(View.GONE);
         if (null != cameraDevice) {
             cameraDevice.close();
             cameraDevice = null;
@@ -324,7 +321,6 @@ public class AudioNoteCameraManager {
     }
 
     protected void onResume() {
-        Log.e(TAG, "onResume");
         startBackgroundThread();
         if (textureView.isAvailable()) {
             openCamera();
@@ -334,7 +330,6 @@ public class AudioNoteCameraManager {
     }
 
     protected void onPause() {
-        Log.e(TAG, "onPause");
         //closeCamera();
         stopBackgroundThread();
     }

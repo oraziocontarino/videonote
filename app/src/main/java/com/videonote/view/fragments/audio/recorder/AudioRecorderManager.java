@@ -2,7 +2,6 @@ package com.videonote.view.fragments.audio.recorder;
 
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.View;
 
 import com.videonote.R;
 import com.videonote.database.DatabaseManager;
@@ -15,7 +14,7 @@ import com.videonote.view.fragments.audio.AudioManager;
 public class AudioRecorderManager extends AudioManager {
     private MediaRecorderManager mediaRecorderManager;
     private RecordRepository recordRepository;
-    private AudioRecorderList noteList;
+    private AudioRecorderListManager noteList;
 
     public AudioRecorderManager(Fragment fragment){
         super(fragment, R.id.audioRecordStatusLabel, R.id.audioRecordStatusValue, R.id.audioRecordStartButton, R.id.audioRecordStopButton, R.id.audioRecordPauseButton, R.id.audioRecordResumeButton);
@@ -25,7 +24,7 @@ public class AudioRecorderManager extends AudioManager {
         mediaRecorderManager = MediaRecorderManager.getInstance(getView().getContext());
 
         // Init recording list
-        noteList = new AudioRecorderList(fragment);
+        noteList = new AudioRecorderListManager(fragment);
         noteList.updateButtons(false);
 
         updateButton(true,false,false,false);
