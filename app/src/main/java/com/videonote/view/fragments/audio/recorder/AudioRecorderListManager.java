@@ -48,11 +48,11 @@ public class AudioRecorderListManager {
 
         addTextNoteButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-            updateTextNoteDTO();
-            storeTextNoteToFile();
-            storeTextNoteToDB();
-            addTextNoteToList();
-            noteText.setText("");
+                updateTextNoteDTO();
+                storeTextNoteToFile();
+                storeNoteToDB();
+                addNoteToList();
+                noteText.setText("");
             }
         });
 
@@ -75,7 +75,10 @@ public class AudioRecorderListManager {
         });
         cameraCaptureButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                mediaPhotoManager.takePicture();
+                updatePictureNoteDTO();;
+                storePictureNoteToFile();
+                storeNoteToDB();
+                addNoteToList();
             }
         });
 
@@ -93,15 +96,26 @@ public class AudioRecorderListManager {
         FileUtils.saveTextFile(fragment, noteDTO.getFileName(), note);
     }
 
-    private void storeTextNoteToDB(){
+    private void storeNoteToDB(){
         noteRepository.insert(noteDTO);
     }
 
-    private void addTextNoteToList(){
+    private void addNoteToList(){
         LinearLayout wrapper = new LinearLayout(fragment.getContext());
         wrapper.addView(generateLabel());
         wrapper.addView(generateButton(wrapper));
         noteList.addView(wrapper);
+    }
+
+    private void updatePictureNoteDTO(){
+        noteDTO.setFileName(FileUtils.getUniqueName("picture_note.jpg"));
+        noteDTO.setRecordId(recordDTO.getId());
+        noteDTO.setStartTime(MediaRecorderManager.getInstance(getContext()).getTime());
+        noteDTO.setType(Common.NOTE_TYPE.PICTURE.name());
+    }
+
+    private void storePictureNoteToFile(){
+        mediaPhotoManager.takePicture(noteDTO);
     }
 
     private TextView generateLabel(){
@@ -111,7 +125,13 @@ public class AudioRecorderListManager {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 1.0f
         ));
-        String content = FileUtils.readTextFile(fragment, noteDTO.getFileName());
+        String content;
+        if(noteDTO.getType().equals(Common.NOTE_TYPE.PICTURE.name()))
+        {
+            content = FileUtils.getFileNameFromPath(noteDTO.getFileName());
+        }else {
+            content = FileUtils.readTextFile(fragment, noteDTO.getFileName());
+        }
         label.setText(content);
         return label;
     }
@@ -127,8 +147,7 @@ public class AudioRecorderListManager {
             private NoteDTO toDelete = noteDTO;
             public void onClick(View v) {
                 Log.d("AUDIO", "BUTTON PRESSED!");
-                TextView textView = null;
-                FileUtils.deleteFile(fragment, toDelete.getFileName());
+                FileUtils.deleteFile(getContext(), toDelete.getFileName());
                 noteList.removeView(wrapper);
             }
         });

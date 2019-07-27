@@ -62,7 +62,9 @@ public class AudioPlayer extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        audioPlayerManager.clean();
+        if(audioPlayerManager!=null) {
+            audioPlayerManager.clean();
+        }
     }
 
     public interface OnFragmentInteractionListener {

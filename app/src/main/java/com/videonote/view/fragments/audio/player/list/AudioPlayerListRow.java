@@ -1,5 +1,6 @@
 package com.videonote.view.fragments.audio.player.list;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -23,7 +24,7 @@ public class AudioPlayerListRow extends LinearLayout {
     private AudioPlayerListRowHeader header;
     private List<LinearLayout> details;
     private NoteRepository noteRepository;
-
+    private AudioPlayerManager manager;
     public AudioPlayerListRow(AudioPlayerManager manager, RecordDTO recordDTO){
         super(manager.getContext());
 
@@ -39,6 +40,7 @@ public class AudioPlayerListRow extends LinearLayout {
         prepareDetail(manager, recordDTO);
         setRow(manager, recordDTO);
     }
+
     private void prepareHeader(AudioPlayerManager manager, RecordDTO recordDTO){
         header = new AudioPlayerListRowHeader(this, manager, recordDTO);
     }

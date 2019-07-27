@@ -111,4 +111,11 @@ public class NoteRepository extends Repository<NoteDTO> {
                 new String[]{String.valueOf(data.getId())});
         db.close();
     }
+
+    public void deleteByRecord(Long id){
+        SQLiteDatabase db = _this.getWritableDatabase();
+        db.delete(TABLE_NAME, RECORD_ID.getName() + " = ?",
+                new String[]{String.valueOf(id)});
+        db.close();
+    }
 }

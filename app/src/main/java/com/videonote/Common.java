@@ -8,7 +8,7 @@ public class Common {
     }
     public static enum NOTE_TYPE {
         TEXT,
-        IMAGE
+        PICTURE
     }
 
 }

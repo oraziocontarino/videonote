@@ -10,8 +10,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.videonote.R;
+import com.videonote.database.DatabaseManager;
+import com.videonote.database.dto.NoteDTO;
 import com.videonote.database.dto.RecordDTO;
+import com.videonote.database.repositories.NoteRepository;
+import com.videonote.database.repositories.RecordRepository;
+import com.videonote.utils.FileUtils;
 import com.videonote.view.fragments.audio.player.AudioPlayerManager;
+
+import java.util.List;
 
 public class AudioPlayerListRowHeader extends LinearLayout {
     private LayoutParams layout;
@@ -22,6 +29,8 @@ public class AudioPlayerListRowHeader extends LinearLayout {
     private ImageButton lessButton;
     private AudioPlayerManager manager;
     private AudioPlayerListRow row;
+    private RecordRepository recordRepository;
+    private NoteRepository noteRepository;
 
     //Top UI
     private RecordDTO record;
@@ -55,6 +64,8 @@ public class AudioPlayerListRowHeader extends LinearLayout {
         super.addView(deleteButton);
         super.addView(moreButton);
         super.addView(lessButton);
+        recordRepository = DatabaseManager.getInstance(getContext()).getRecordRepository();
+        noteRepository = DatabaseManager.getInstance(getContext()).getNoteRepository();
     }
 
     private void initPlayerButtons(){
@@ -73,8 +84,15 @@ public class AudioPlayerListRowHeader extends LinearLayout {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                manager.stopAction();
-                toastDelete();
+                try {
+                    manager.stopAction();
+                    deleteNotes();
+                    deleteRecord();
+                    toastDelete();
+                    manager.removeRow(row);
+                }catch(Exception e){
+                    Log.d("AUDIO", "ERROR");
+                }
             }
         });
 
@@ -145,5 +163,33 @@ public class AudioPlayerListRowHeader extends LinearLayout {
 
     public int getDetailVisibility(){
         return lessButton.getVisibility() == View.GONE ? View.VISIBLE : View.GONE;
+    }
+
+    private void deleteNotes(){
+        // Get notes to delete
+        List<NoteDTO> notes = noteRepository.getByRecordId(record.getId());
+
+        // Delete notes from storage
+        for(NoteDTO note : notes){
+            try {
+                FileUtils.deleteFile(getContext(), note.getFileName());
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        // Delete notes from database
+        noteRepository.deleteByRecord(record.getId());
+    }
+    private void deleteRecord(){
+        // Delete notes from storage
+        try {
+            FileUtils.deleteFile(getContext(), FileUtils.getFileNameFromPath(record.getFileName()));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        // Delete notes from database
+        recordRepository.delete(record);
     }
 }

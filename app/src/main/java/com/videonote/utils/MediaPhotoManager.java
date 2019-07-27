@@ -34,6 +34,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.videonote.R;
+import com.videonote.database.dto.NoteDTO;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -62,6 +63,8 @@ public class MediaPhotoManager {
     private boolean mFlashSupported;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
+    public static final int PICTURE_WIDTH = 640;
+    public static final int PICTURE_HEIGHT = 480;
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -147,7 +150,7 @@ public class MediaPhotoManager {
         }
     }
 
-    public void takePicture() {
+    public void takePicture(NoteDTO noteDTO) {
         if (null == cameraDevice) {
             return;
         }
@@ -158,13 +161,16 @@ public class MediaPhotoManager {
             if (characteristics != null) {
                 jpegSizes = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP).getOutputSizes(ImageFormat.JPEG);
             }
+            /*
             int width = 640;
             int height = 480;
             if (jpegSizes != null && 0 < jpegSizes.length) {
                 width = jpegSizes[0].getWidth();
                 height = jpegSizes[0].getHeight();
             }
-            ImageReader reader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1);
+            */
+
+            ImageReader reader = ImageReader.newInstance(PICTURE_WIDTH, PICTURE_HEIGHT, ImageFormat.JPEG, 1);
             List<Surface> outputSurfaces = new ArrayList<Surface>(2);
             outputSurfaces.add(reader.getSurface());
             outputSurfaces.add(new Surface(textureView.getSurfaceTexture()));
@@ -174,7 +180,8 @@ public class MediaPhotoManager {
             // Orientation
             int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
-            final File file = new File(Environment.getExternalStorageDirectory() + "/pic.jpg");
+            final File file = new File(FileUtils.getFilePath(getContext(), noteDTO.getFileName(),false));
+            //final File file = new File(Environment.getExternalStorageDirectory() + "/pic.jpg");
             ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
                 @Override
                 public void onImageAvailable(ImageReader reader) {

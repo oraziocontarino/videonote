@@ -1,5 +1,6 @@
 package com.videonote.view.fragments.audio.player;
 
+import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +40,7 @@ public class AudioPlayerManager extends AudioManager {
     private TextView textAttachment;
     private ImageView imageAttachment;
     private ScrollView attachments;
+    private LinearLayout attachmentsWrapper;
 
 
     public AudioPlayerManager(Fragment fragment){
@@ -58,6 +60,8 @@ public class AudioPlayerManager extends AudioManager {
         attachments = getView().findViewById(R.id.attachments);
         textAttachment = getView().findViewById(R.id.textAttachment);
         imageAttachment = getView().findViewById(R.id.imageAttachment);
+        attachmentsWrapper = getView().findViewById(R.id.attachmentsWrapper);
+
         // Init recording list
         initRecordsList();
 
@@ -159,12 +163,22 @@ public class AudioPlayerManager extends AudioManager {
         }
 
         if(nextNote.getType().equals(Common.NOTE_TYPE.TEXT.name())){
-            Toast.makeText(getContext(), "Update note top box!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Update text note!", Toast.LENGTH_SHORT).show();
             String text = FileUtils.readTextFile(fragment, nextNote.getFileName());
-            textAttachment.setText(text);
+            //textAttachment.setText(text);
+            //attachments.setVisibility(View.VISIBLE);
+            //imageAttachment.setVisibility(View.GONE);
+            //textAttachment.setVisibility(View.VISIBLE);
             nextNote = null;
+        }else if(nextNote.getType().equals(Common.NOTE_TYPE.PICTURE.name())){
+            noteRepository = DatabaseManager.getInstance(getContext()).getNoteRepository();
+            Toast.makeText(getContext(), "Update picture note!", Toast.LENGTH_SHORT).show();
+            Bitmap pictureNote = FileUtils.readPictureFile(fragment, nextNote.getFileName());
+            imageAttachment.setImageBitmap(pictureNote);
             attachments.setVisibility(View.VISIBLE);
-            textAttachment.setVisibility(View.VISIBLE);
+            imageAttachment.setVisibility(View.VISIBLE);
+            textAttachment.setVisibility(View.GONE);
+            nextNote = null;
         }
     }
     private void initRecordsList(){
@@ -173,5 +187,9 @@ public class AudioPlayerManager extends AudioManager {
         for(final RecordDTO record : records){
             recordsList.addView(new AudioPlayerListRow(this, record));
         }
+    }
+
+    public void removeRow(AudioPlayerListRow row){
+        recordsList.removeView(row);
     }
 }
