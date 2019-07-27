@@ -24,10 +24,8 @@ public class FileUtils {
     public static boolean saveTextFile(Fragment fragment, String fileName, String content){
         try {
             Log.i("FILE_UTILS", "file: "+fileName);
-            File myFile = new File(fileName);
+            File myFile = new File(FileUtils.getFilePath(fragment.getContext(), fileName, false));
             FileOutputStream fos  = new FileOutputStream(myFile);
-            FileOutputStream fos =  fragment.getActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
-            String tmp = myFile.getAbsolutePath();
             Writer out = new OutputStreamWriter(fos);
             out.write(content);
             out.close();
@@ -45,7 +43,8 @@ public class FileUtils {
         try {
 
             Log.i("FILE_UTILS", "file: "+getFilePath(fragment.getContext(), fileName, false));
-            FileInputStream fis = fragment.getActivity().openFileInput(fileName);
+            File myFile = new File(FileUtils.getFilePath(fragment.getContext(), fileName, false));
+            FileInputStream fis = new FileInputStream(myFile);
             BufferedReader r = new BufferedReader(new InputStreamReader(fis));
             StringBuilder sb = new StringBuilder();
             String row;
