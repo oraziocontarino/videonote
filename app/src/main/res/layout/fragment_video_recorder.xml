@@ -7,25 +7,34 @@
     android:orientation="vertical">
     <!-- TODO: Update blank fragment layout -->
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:weightSum="100">
 
         <TextView
             android:id="@+id/videoRecordStatusLabel"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="Video record: " />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:text="Video record: "
+            android:layout_gravity="center" />
         <TextView
             android:id="@+id/videoRecordStatusValue"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="Not running" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:text="Not running"
+            android:layout_gravity="center" />
     </LinearLayout>
+
+    <TextureView
+        android:id="@+id/videoCameraPreviewTextureView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,22 +50,6 @@
             android:text="Start" />
 
         <Button
-            android:id="@+id/videoRecordPauseButton"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="3"
-            android:clickable = "false"
-            android:text="Pause" />
-
-        <Button
-            android:id="@+id/videoRecordResumeButton"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="3"
-            android:clickable = "false"
-            android:text="Resume" />
-
-        <Button
             android:id="@+id/videoRecordStopButton"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -64,12 +57,6 @@
             android:clickable = "false"
             android:text="Stop" />
     </LinearLayout>
-
-    <TextureView
-        android:id="@+id/videoCameraPreviewTextureView"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center" />
 
     <LinearLayout
         android:layout_width="match_parent"

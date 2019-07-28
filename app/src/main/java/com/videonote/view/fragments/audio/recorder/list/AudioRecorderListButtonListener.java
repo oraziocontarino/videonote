@@ -1,4 +1,4 @@
-package com.videonote.view.fragments.audio.recorder;
+package com.videonote.view.fragments.audio.recorder.list;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;

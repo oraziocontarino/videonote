@@ -1,31 +1,28 @@
-package com.videonote.utils;
+package com.videonote.view.fragments.audio;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
-import android.os.SystemClock;
-import android.util.Log;
 
 import com.videonote.database.dto.RecordDTO;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-public class MediaPlayerManager {
-    private static MediaPlayerManager instance = null;
+public class AudioMediaPlayerManager {
+    private static AudioMediaPlayerManager instance = null;
     private MediaPlayer mediaPlayer;
     private Context context;
     private boolean dirty;
     private boolean paused;
-    private MediaPlayerManager(Context context){
+    private AudioMediaPlayerManager(Context context){
         this.context = context;
         mediaPlayer = new MediaPlayer();
         dirty = false;
     }
 
-    public static MediaPlayerManager getInstance(Context context){
+    public static AudioMediaPlayerManager getInstance(Context context){
         if(instance == null){
-            instance = new MediaPlayerManager(context);
+            instance = new AudioMediaPlayerManager(context);
         }else{
             instance.setContext(context);
         }

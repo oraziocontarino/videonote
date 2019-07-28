@@ -7,40 +7,32 @@ import com.videonote.R;
 import com.videonote.database.DatabaseManager;
 import com.videonote.database.dto.RecordDTO;
 import com.videonote.database.repositories.RecordRepository;
-import com.videonote.utils.FileUtils;
-import com.videonote.utils.MediaRecorderManager;
-import com.videonote.utils.MediaVideoManager;
-import com.videonote.view.fragments.audio.AudioManager;
-import com.videonote.view.fragments.audio.recorder.AudioRecorderListManager;
+import com.videonote.view.fragments.video.VideoMediaRecorderManager;
+import com.videonote.view.fragments.utils.MediaRecorderUIController;
 
-public class VideoRecorderManager extends AudioManager {
-    private MediaRecorderManager mediaRecorderManager;
+public class VideoRecorderController extends MediaRecorderUIController {
+    private VideoMediaRecorderManager videoMediaRecorderManager;
     private RecordRepository recordRepository;
-    private MediaVideoManager mediaVideoManager;
     //private AudioRecorderListManager noteList;
 
-    public VideoRecorderManager(Fragment fragment){
+    public VideoRecorderController(Fragment fragment){
         super(
                 fragment,
                 R.id.videoRecordStatusLabel,
                 R.id.videoRecordStatusValue,
                 R.id.videoRecordStartButton,
-                R.id.videoRecordStopButton,
-                R.id.videoRecordPauseButton,
-                R.id.videoRecordResumeButton
+                R.id.videoRecordStopButton
         );
-        mediaVideoManager = new MediaVideoManager(fragment);
         // Init Database
         recordRepository = DatabaseManager.getInstance(getContext()).getRecordRepository();
 
-        mediaRecorderManager = MediaRecorderManager.getInstance(getView().getContext());
+        videoMediaRecorderManager = VideoMediaRecorderManager.getInstance(fragment);
+        videoMediaRecorderManager.openCamera();
 
         // Init recording list
 //        noteList = new AudioRecorderListManager(fragment);
 //        noteList.updateButtons(false);
-
-        mediaVideoManager.openCamera();
-        updateButton(true,false,false,false);
+        updateButton(true,false);
     }
 
     @Override
@@ -48,12 +40,12 @@ public class VideoRecorderManager extends AudioManager {
         try{
             //noteList.clean();
             //noteList.updateRecordDTO(FileUtils.getFilePath(getContext(), "video.mp4", true));
-            //mediaRecorderManager.startAudioRecording(noteList.getRecordDTO());
+            //            videoMediaRecorderManager.startVideoRecording(noteList.getRecordDTO());
+            videoMediaRecorderManager.startVideoRecording(null);
             //recordRepository.insert(noteList.getRecordDTO());
             //noteList.updateButtons(true);
-            mediaVideoManager.startRecordingVideo();
             statusLabel = "RECORDING";
-            updateButton(false,true,true,false);
+            updateButton(false,true);
         }catch(Exception e){
             //TODO: print error message in toast notification
             Log.d("AUDIO", e.getMessage() == null ? "null": e.getMessage());
@@ -65,35 +57,21 @@ public class VideoRecorderManager extends AudioManager {
 
     @Override
     protected void stopAction(){
-        mediaVideoManager.stopRecordingVideo();
-        //MediaRecorderManager.getInstance(getContext()).stopAudioRecording();
+        videoMediaRecorderManager.stopAudioRecording();
         statusLabel = "STOPPED";
-        updateButton(true,false,false,false);
-    }
-
-    @Override
-    protected void pauseAction(){
-        MediaRecorderManager.getInstance(getContext()).pauseAudioRecording();
-        statusLabel = "PAUSED";
-        updateButton(false,true,false,true);
-    }
-    @Override
-    protected void resumeAction(){
-        mediaRecorderManager.resumeAudioRecording();
-        statusLabel = "RECORDING";
-        updateButton(false,true,true,false);
+        updateButton(true,false);
     }
 
     @Override
     protected void clean(){
         super.clean();
-        mediaRecorderManager.clean();
+        videoMediaRecorderManager.clean();
         //noteList.clean();
     }
 
     @Override
     protected void updateHeaderTime(){
-        headerTime = mediaRecorderManager == null ? "": mediaRecorderManager.getFormattedTime()+" - "+statusLabel;
+        headerTime = videoMediaRecorderManager == null ? "": videoMediaRecorderManager.getFormattedTime()+" - "+statusLabel;
     }
 
     @Override

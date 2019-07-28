@@ -1,9 +1,8 @@
-package com.videonote.view.fragments.audio.recorder;
+package com.videonote.view.fragments.audio.recorder.list;
 
 import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -11,7 +10,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.videonote.Common;
 import com.videonote.database.DatabaseManager;
@@ -21,7 +19,7 @@ import com.videonote.database.dto.RecordDTO;
 import com.videonote.R;
 import com.videonote.utils.FileUtils;
 import com.videonote.utils.MediaPhotoManager;
-import com.videonote.utils.MediaRecorderManager;
+import com.videonote.view.fragments.audio.AudioMediaRecorderManager;
 
 public class AudioRecorderListManager {
     private Fragment fragment;
@@ -112,7 +110,7 @@ public class AudioRecorderListManager {
     private void updateTextNoteDTO(){
         noteDTO.setFileName(FileUtils.getUniqueName("text_note.txt"));
         noteDTO.setRecordId(recordDTO.getId());
-        noteDTO.setStartTime(MediaRecorderManager.getInstance(getContext()).getTime());
+        noteDTO.setStartTime(AudioMediaRecorderManager.getInstance(getContext()).getTime());
         noteDTO.setType(Common.NOTE_TYPE.TEXT.name());
     }
 
@@ -135,7 +133,7 @@ public class AudioRecorderListManager {
     private void updatePictureNoteDTO(){
         noteDTO.setFileName(FileUtils.getUniqueName("picture_note.jpg"));
         noteDTO.setRecordId(recordDTO.getId());
-        noteDTO.setStartTime(MediaRecorderManager.getInstance(getContext()).getTime());
+        noteDTO.setStartTime(AudioMediaRecorderManager.getInstance(getContext()).getTime());
         noteDTO.setType(Common.NOTE_TYPE.PICTURE.name());
     }
 

@@ -1,4 +1,4 @@
-package com.videonote.utils;
+package com.videonote.view.fragments.video;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-public class MediaVideoManager {
+public class VideoMediaRecorderController {
     private Fragment fragment;
     public static final int VIDEO_WIDTH = 640;
     public static final int VIDEO_HEIGHT = 480;
@@ -553,7 +553,7 @@ public class MediaVideoManager {
 
     }
 
-    public MediaVideoManager(Fragment fragment) {
+    public VideoMediaRecorderController(Fragment fragment) {
         this.fragment = fragment;
         mTextureView = getView().findViewById(R.id.videoCameraPreviewTextureView);
     }

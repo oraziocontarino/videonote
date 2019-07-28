@@ -12,7 +12,7 @@ import com.videonote.R;
 
 public class AudioPlayer extends Fragment {
     // Header UI - common to Recorder
-    private AudioPlayerManager audioPlayerManager;
+    private AudioPlayerController audioPlayerManager;
 
     private OnFragmentInteractionListener mListener;
 
@@ -67,6 +67,6 @@ public class AudioPlayer extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-        audioPlayerManager = new AudioPlayerManager(this);
+        audioPlayerManager = new AudioPlayerController(this);
     }
 }

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.videonote.R;
 
 public class AudioRecorder extends Fragment{
-    private AudioRecorderManager audioRecorderManager;
+    private AudioRecorderController audioRecorderController;
 
     // Body
     private OnFragmentInteractionListener mListener;
@@ -53,7 +53,7 @@ public class AudioRecorder extends Fragment{
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        audioRecorderManager.clean();
+        audioRecorderController.clean();
     }
 
     public interface OnFragmentInteractionListener {
@@ -63,7 +63,7 @@ public class AudioRecorder extends Fragment{
     @Override
     public void onStart(){
         super.onStart();
-        audioRecorderManager = new AudioRecorderManager(this);
+        audioRecorderController = new AudioRecorderController(this);
     }
 }
 

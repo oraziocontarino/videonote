@@ -2,9 +2,11 @@ package com.videonote.view.fragments.video.player;
 
 import android.support.v4.app.Fragment;
 
-public class VideoPlayerManager {
+import com.videonote.view.fragments.utils.MediaPlayerUIController;
+
+public class VideoPlayerController /*extends MediaPlayerUIController*/ {
     private Fragment fragment;
-    public VideoPlayerManager(Fragment fragment){
+    public VideoPlayerController(Fragment fragment){
         this.fragment = fragment;
     }
 

@@ -1,32 +1,31 @@
-package com.videonote.utils;
+package com.videonote.view.fragments.audio;
 
 import android.content.Context;
 import android.media.MediaRecorder;
 import android.os.SystemClock;
-import android.provider.MediaStore;
 
 import com.videonote.database.dto.RecordDTO;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-public class MediaRecorderManager {
-    private static MediaRecorderManager instance = null;
+public class AudioMediaRecorderManager {
+    private static AudioMediaRecorderManager instance = null;
     private MediaRecorder mediaRecorder;
     private Context context;
     private Long startTime = 0L;
     private Long totalRecordingTime = 0L;
     private boolean recording;
 
-    private MediaRecorderManager(Context context){
+    private AudioMediaRecorderManager(Context context){
         this.context = context;
         mediaRecorder = new MediaRecorder();
         recording = false;
     }
 
-    public static MediaRecorderManager getInstance(Context context){
+    public static AudioMediaRecorderManager getInstance(Context context){
         if(instance == null){
-            instance = new MediaRecorderManager(context);
+            instance = new AudioMediaRecorderManager(context);
         }else{
             instance.setContext(context);
         }
@@ -46,15 +45,6 @@ public class MediaRecorderManager {
         initTime();
     }
 
-    public void pauseAudioRecording(){
-        startTime = 0L;
-        recording = false;
-    }
-
-    public void resumeAudioRecording(){
-        startTime = SystemClock.uptimeMillis();
-        recording = true;
-    }
     public void stopAudioRecording(){
         mediaRecorder.stop();
         recording = false;

@@ -16,7 +16,7 @@ import com.videonote.database.dto.RecordDTO;
 import com.videonote.database.repositories.NoteRepository;
 import com.videonote.database.repositories.RecordRepository;
 import com.videonote.utils.FileUtils;
-import com.videonote.view.fragments.audio.player.AudioPlayerManager;
+import com.videonote.view.fragments.audio.player.AudioPlayerController;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class AudioPlayerListRowHeader extends LinearLayout {
     private ImageButton deleteButton;
     private ImageButton moreButton;
     private ImageButton lessButton;
-    private AudioPlayerManager manager;
+    private AudioPlayerController manager;
     private AudioPlayerListRow row;
     private RecordRepository recordRepository;
     private NoteRepository noteRepository;
@@ -35,7 +35,7 @@ public class AudioPlayerListRowHeader extends LinearLayout {
     //Top UI
     private RecordDTO record;
 
-    public AudioPlayerListRowHeader(AudioPlayerListRow row, AudioPlayerManager manager, RecordDTO record){
+    public AudioPlayerListRowHeader(AudioPlayerListRow row, AudioPlayerController manager, RecordDTO record){
         super(manager.getContext());
         this.record = record;
         this.manager = manager;

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.videonote.R;
 
 public class VideoRecorder extends Fragment {
-    private VideoRecorderManager videoRecorderManager;
+    private VideoRecorderController videoRecorderController;
     private OnFragmentInteractionListener mListener;
 
     public VideoRecorder() {
@@ -52,7 +52,7 @@ public class VideoRecorder extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        videoRecorderManager.clean();
+        videoRecorderController.clean();
     }
 
     public interface OnFragmentInteractionListener {
@@ -63,7 +63,7 @@ public class VideoRecorder extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-        videoRecorderManager = new VideoRecorderManager(this);
+        videoRecorderController = new VideoRecorderController(this);
         //mCameraDevice = getView().findViewById(R.id.videoCameraPreviewTextureView);
         //mPreviewSize = getView().findViewById(R.id.videoCameraPreviewTextureView);
         //openCamera(VIDEO_WIDTH, VIDEO_HEIGHT);

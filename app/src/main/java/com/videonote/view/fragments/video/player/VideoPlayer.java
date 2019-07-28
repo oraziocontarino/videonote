@@ -12,7 +12,7 @@ import com.videonote.R;
 
 public class VideoPlayer extends Fragment {
     // Header UI - common to Recorder
-    private VideoPlayerManager videoPlayerManager;
+    private VideoPlayerController videoPlayerController;
 
     private OnFragmentInteractionListener mListener;
 
@@ -54,8 +54,8 @@ public class VideoPlayer extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        if(videoPlayerManager!=null) {
-            videoPlayerManager.clean();
+        if(videoPlayerController !=null) {
+            videoPlayerController.clean();
         }
     }
 
@@ -66,6 +66,6 @@ public class VideoPlayer extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-        videoPlayerManager = new VideoPlayerManager(this);
+        videoPlayerController = new VideoPlayerController(this);
     }
 }

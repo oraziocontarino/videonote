@@ -1,6 +1,5 @@
 package com.videonote.view.fragments.audio.player.list;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -10,8 +9,8 @@ import com.videonote.database.DatabaseManager;
 import com.videonote.database.dto.NoteDTO;
 import com.videonote.database.dto.RecordDTO;
 import com.videonote.database.repositories.NoteRepository;
-import com.videonote.utils.MediaPlayerManager;
-import com.videonote.view.fragments.audio.player.AudioPlayerManager;
+import com.videonote.view.fragments.audio.AudioMediaPlayerManager;
+import com.videonote.view.fragments.audio.player.AudioPlayerController;
 import com.videonote.view.fragments.audio.player.list.detail.AudioPlayerListRowDetailButton;
 import com.videonote.view.fragments.audio.player.list.detail.AudioPlayerListRowDetailDivider;
 import com.videonote.view.fragments.audio.player.list.detail.AudioPlayerListRowDetailText;
@@ -24,8 +23,8 @@ public class AudioPlayerListRow extends LinearLayout {
     private AudioPlayerListRowHeader header;
     private List<LinearLayout> details;
     private NoteRepository noteRepository;
-    private AudioPlayerManager manager;
-    public AudioPlayerListRow(AudioPlayerManager manager, RecordDTO recordDTO){
+    private AudioPlayerController manager;
+    public AudioPlayerListRow(AudioPlayerController manager, RecordDTO recordDTO){
         super(manager.getContext());
 
         layout = new LayoutParams(
@@ -41,22 +40,22 @@ public class AudioPlayerListRow extends LinearLayout {
         setRow(manager, recordDTO);
     }
 
-    private void prepareHeader(AudioPlayerManager manager, RecordDTO recordDTO){
+    private void prepareHeader(AudioPlayerController manager, RecordDTO recordDTO){
         header = new AudioPlayerListRowHeader(this, manager, recordDTO);
     }
-    private void setRow(AudioPlayerManager manager, RecordDTO recordDTO){
+    private void setRow(AudioPlayerController manager, RecordDTO recordDTO){
         super.addView(header);
         for(LinearLayout row : details){
             super.addView(row);
         }
     }
 
-    private void prepareDetail(AudioPlayerManager manager, RecordDTO recordDTO){
+    private void prepareDetail(AudioPlayerController manager, RecordDTO recordDTO){
         List<NoteDTO> notes = noteRepository.getByRecordId(recordDTO.getId());
         details = new ArrayList<LinearLayout>();
         for(NoteDTO note : notes){
             details.add(new AudioPlayerListRowDetailText(manager.getContext(), "Description", note.getFileName(), note));
-            details.add(new AudioPlayerListRowDetailText(manager.getContext(), "Time", MediaPlayerManager.getFormattedTime(note.getStartTime()), note));
+            details.add(new AudioPlayerListRowDetailText(manager.getContext(), "Time", AudioMediaPlayerManager.getFormattedTime(note.getStartTime()), note));
 
             details.add(new AudioPlayerListRowDetailButton(manager.getContext(), "Delete", R.drawable.ic_baseline_delete_forever_24px, note, new OnClickListener() {
                 @Override

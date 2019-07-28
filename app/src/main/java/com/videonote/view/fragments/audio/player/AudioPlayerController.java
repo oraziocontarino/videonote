@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.videonote.Common;
 import com.videonote.R;
@@ -18,18 +17,16 @@ import com.videonote.database.dto.RecordDTO;
 import com.videonote.database.repositories.NoteRepository;
 import com.videonote.database.repositories.RecordRepository;
 import com.videonote.utils.FileUtils;
-import com.videonote.utils.MediaPlayerManager;
-import com.videonote.view.fragments.audio.AudioManager;
+import com.videonote.view.fragments.audio.AudioMediaPlayerManager;
+import com.videonote.view.fragments.utils.MediaPlayerUIController;
 import com.videonote.view.fragments.audio.player.list.AudioPlayerListRow;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 import java.util.Stack;
 
-public class AudioPlayerManager extends AudioManager {
+public class AudioPlayerController extends MediaPlayerUIController {
     private Fragment fragment;
-    private MediaPlayerManager mediaPlayerManager;
+    private AudioMediaPlayerManager audioMediaPlayerManager;
     private RecordRepository recordRepository;
     private NoteRepository noteRepository;
     private LinearLayout recordsList;
@@ -43,7 +40,7 @@ public class AudioPlayerManager extends AudioManager {
     private LinearLayout attachmentsWrapper;
 
 
-    public AudioPlayerManager(Fragment fragment){
+    public AudioPlayerController(Fragment fragment){
         super(fragment, R.id.audioPlayerStatusLabel, R.id.audioPlayerStatusValue, R.id.audioPlayerStartButton, R.id.audioPlayerStopButton, R.id.audioPlayerPauseButton, R.id.audioPlayerResumeButton);
         this.fragment = fragment;
 
@@ -56,7 +53,7 @@ public class AudioPlayerManager extends AudioManager {
         recordRepository = DatabaseManager.getInstance(getContext()).getRecordRepository();
         noteRepository = DatabaseManager.getInstance(getContext()).getNoteRepository();
 
-        mediaPlayerManager = MediaPlayerManager.getInstance(getView().getContext());
+        audioMediaPlayerManager = AudioMediaPlayerManager.getInstance(getView().getContext());
         noteRepository = DatabaseManager.getInstance(getContext()).getNoteRepository();
         attachments = getView().findViewById(R.id.attachments);
         textAttachment = getView().findViewById(R.id.textAttachment);
@@ -80,7 +77,7 @@ public class AudioPlayerManager extends AudioManager {
             for(NoteDTO note : currentRecordNotesList){
                 currentRecordNotesStack.push(note);
             }
-            mediaPlayerManager.startAudioPlayer(record);
+            audioMediaPlayerManager.startAudioPlayer(record);
             startAction();
         }catch (Exception e){
             Log.e("AUDIO", e.getMessage());
@@ -96,7 +93,7 @@ public class AudioPlayerManager extends AudioManager {
     @Override
     public void stopAction() {
         try{
-            mediaPlayerManager.stopAudioPlayer();
+            audioMediaPlayerManager.stopAudioPlayer();
             statusLabel = "STOPPED";
             updateButton(false,false,false,false);
         }catch (Exception e){
@@ -107,7 +104,7 @@ public class AudioPlayerManager extends AudioManager {
     @Override
     public void pauseAction() {
         try{
-            mediaPlayerManager.pauseAudioPlayer();
+            audioMediaPlayerManager.pauseAudioPlayer();
             statusLabel = "PAUSED";
             updateButton(false,true,false,true);
         }catch (Exception e){
@@ -118,7 +115,7 @@ public class AudioPlayerManager extends AudioManager {
     @Override
     public void resumeAction() {
         try{
-            mediaPlayerManager.resumeAudioPlayer();
+            audioMediaPlayerManager.resumeAudioPlayer();
             statusLabel = "PLAYING";
             updateButton(false,true,true,false);
         }catch (Exception e){
@@ -129,26 +126,26 @@ public class AudioPlayerManager extends AudioManager {
     @Override
     protected void clean(){
         super.clean();
-        mediaPlayerManager.clean();
+        audioMediaPlayerManager.clean();
     }
 
     @Override
     protected void updateHeaderTime(){
-        headerTime = mediaPlayerManager == null ? "": mediaPlayerManager.getFormattedTime()+" - "+statusLabel;
+        headerTime = audioMediaPlayerManager == null ? "": audioMediaPlayerManager.getFormattedTime()+" - "+statusLabel;
     }
 
     @Override
     protected void hookInterval(){
-        if(mediaPlayerManager == null){
+        if(audioMediaPlayerManager == null){
             return;
         }
 
-        if(!mediaPlayerManager.isPlaying() && !mediaPlayerManager.isPaused() && mediaPlayerManager.isDirty()){
+        if(!audioMediaPlayerManager.isPlaying() && !audioMediaPlayerManager.isPaused() && audioMediaPlayerManager.isDirty()){
             nextNote = null;
             textAttachment.setText("");
             attachments.setVisibility(View.GONE);
             textAttachment.setVisibility(View.GONE);
-            mediaPlayerManager.resetAudioPlayer();
+            audioMediaPlayerManager.resetAudioPlayer();
             updateButton(false,false,false,false);
         }
 
@@ -159,7 +156,7 @@ public class AudioPlayerManager extends AudioManager {
             nextNote = currentRecordNotesStack.pop();
         }
 
-        if(nextNote.getStartTime() > mediaPlayerManager.getTime()){
+        if(nextNote.getStartTime() > audioMediaPlayerManager.getTime()){
             return;
         }
 
