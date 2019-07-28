@@ -1,4 +1,4 @@
-package com.videonote.view.fragments.audio.player;
+package com.videonote.view.fragments.video.player;
 
 import android.content.Context;
 import android.net.Uri;
@@ -10,18 +10,18 @@ import android.view.ViewGroup;
 
 import com.videonote.R;
 
-public class AudioPlayer extends Fragment {
+public class VideoPlayer extends Fragment {
     // Header UI - common to Recorder
-    private AudioPlayerManager audioPlayerManager;
+    private VideoPlayerManager videoPlayerManager;
 
     private OnFragmentInteractionListener mListener;
 
-    public AudioPlayer() {
+    public VideoPlayer() {
         // Required empty public constructor
     }
 
-    public static AudioPlayer newInstance(String param1, String param2) {
-        AudioPlayer fragment = new AudioPlayer();
+    public static VideoPlayer newInstance(String param1, String param2) {
+        VideoPlayer fragment = new VideoPlayer();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -36,9 +36,8 @@ public class AudioPlayer extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_audio_player, container, false);
+        return inflater.inflate(R.layout.fragment_video_player, container, false);
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -55,8 +54,8 @@ public class AudioPlayer extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        if(audioPlayerManager!=null) {
-            audioPlayerManager.clean();
+        if(videoPlayerManager!=null) {
+            videoPlayerManager.clean();
         }
     }
 
@@ -67,6 +66,6 @@ public class AudioPlayer extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-        audioPlayerManager = new AudioPlayerManager(this);
+        videoPlayerManager = new VideoPlayerManager(this);
     }
 }

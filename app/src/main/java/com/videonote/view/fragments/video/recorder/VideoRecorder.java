@@ -1,4 +1,4 @@
-package com.videonote.view.fragments.audio.player;
+package com.videonote.view.fragments.video.recorder;
 
 import android.content.Context;
 import android.net.Uri;
@@ -10,18 +10,16 @@ import android.view.ViewGroup;
 
 import com.videonote.R;
 
-public class AudioPlayer extends Fragment {
-    // Header UI - common to Recorder
-    private AudioPlayerManager audioPlayerManager;
-
+public class VideoRecorder extends Fragment {
+    private VideoRecorderManager videoRecorderManager;
     private OnFragmentInteractionListener mListener;
 
-    public AudioPlayer() {
+    public VideoRecorder() {
         // Required empty public constructor
     }
 
-    public static AudioPlayer newInstance(String param1, String param2) {
-        AudioPlayer fragment = new AudioPlayer();
+    public static VideoRecorder newInstance(String param1, String param2) {
+        VideoRecorder fragment = new VideoRecorder();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -36,9 +34,8 @@ public class AudioPlayer extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_audio_player, container, false);
+        return inflater.inflate(R.layout.fragment_video_recorder, container, false);
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -55,18 +52,21 @@ public class AudioPlayer extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        if(audioPlayerManager!=null) {
-            audioPlayerManager.clean();
-        }
+        videoRecorderManager.clean();
     }
 
     public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
     @Override
     public void onStart(){
         super.onStart();
-        audioPlayerManager = new AudioPlayerManager(this);
+        videoRecorderManager = new VideoRecorderManager(this);
+        //mCameraDevice = getView().findViewById(R.id.videoCameraPreviewTextureView);
+        //mPreviewSize = getView().findViewById(R.id.videoCameraPreviewTextureView);
+        //openCamera(VIDEO_WIDTH, VIDEO_HEIGHT);
+        //startRecordingVideo();
     }
 }

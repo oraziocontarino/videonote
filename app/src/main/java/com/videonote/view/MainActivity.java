@@ -19,11 +19,15 @@ import com.videonote.R;
 import com.videonote.view.fragments.HomeFragment;
 import com.videonote.view.fragments.audio.player.AudioPlayer;
 import com.videonote.view.fragments.audio.recorder.AudioRecorder;
+import com.videonote.view.fragments.video.player.VideoPlayer;
+import com.videonote.view.fragments.video.recorder.VideoRecorder;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         AudioRecorder.OnFragmentInteractionListener,
-        AudioPlayer.OnFragmentInteractionListener {
+        AudioPlayer.OnFragmentInteractionListener,
+        VideoRecorder.OnFragmentInteractionListener,
+        VideoPlayer.OnFragmentInteractionListener {
     private View navHeader;
 
     @Override
@@ -102,10 +106,10 @@ public class MainActivity extends AppCompatActivity implements
                 fragment = new AudioRecorder();
                 break;
             case R.id.nav_video_player:
-                fragment = new HomeFragment();
+                fragment = new VideoPlayer();
                 break;
             case R.id.nav_video_recorder:
-                fragment = new HomeFragment();
+                fragment = new VideoRecorder();
                 break;
             case R.id.nav_exit:
                 System.exit(0);

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragments.video.player.VideoPlayer"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/videoPlayerStatusLabel"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Video record: " />
+        <TextView
+            android:id="@+id/videoPlayerStatusValue"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Not running" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/videoPlayerStartButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="3"
+            android:clickable = "false"
+            android:text="Start" />
+
+        <Button
+            android:id="@+id/videoPlayerPauseButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="3"
+            android:clickable = "false"
+            android:text="Pause" />
+
+        <Button
+            android:id="@+id/videoPlayerResumeButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="3"
+            android:clickable = "false"
+            android:text="Resume" />
+
+        <Button
+            android:id="@+id/videoPlayerStopButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="3"
+            android:clickable = "false"
+            android:text="Stop" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_weight="0"
+        android:background="@color/colorTransparent" />
+
+    <ScrollView
+        android:id="@+id/attachments"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/attachmentsWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <TextView
+                android:id="@+id/textAttachment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="100"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/imageAttachment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="100"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:visibility="gone"/>
+        </LinearLayout>
+    </ScrollView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_weight="0"
+        android:background="@color/colorTransparent" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/videoPlayerRecordsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- - ->
+                        <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/table_primary"
+                                    android:ems="10"
+                                    android:gravity="center"
+                                    android:text="My First Record! bla bla bla"
+                                    android:textColor="@color/colorPrimaryText" />
+
+                                <ImageButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/table_primary"
+                                    android:src="@drawable/ic_baseline_play_arrow_24px" />
+
+                                <ImageButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/table_primary"
+                                    android:src="@drawable/ic_baseline_delete_forever_24px" />
+
+                                <ImageButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/table_primary"
+                                    android:src="@drawable/ic_baseline_unfold_more_24px" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/table_secondary"
+                                    android:ems="10"
+                                    android:gravity="center"
+                                    android:text="Description"
+                                    android:textColor="@color/colorSecondaryText" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/table_secondary"
+                                    android:ems="10"
+                                    android:gravity="center"
+                                    android:text="Nota 1"
+                                    android:textColor="@color/colorSecondaryText" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp"
+                                android:weightSum="100">
+                                <TextView
+                                    android:layout_height="match_parent"
+                                    android:layout_width="match_parent"
+                                    android:layout_weight="30"
+                                    android:background="@drawable/table_secondary"
+                                    android:ems="10"
+                                    android:gravity="center"
+                                    android:text="Time"
+                                    android:textColor="@color/colorSecondaryText" />
+                                <TextView
+                                    android:layout_height="match_parent"
+                                    android:layout_width="match_parent"
+                                    android:layout_weight="70"
+                                    android:background="@drawable/table_secondary"
+                                    android:ems="10"
+                                    android:gravity="center"
+                                    android:text="00:00:00"
+                                    android:textColor="@color/colorSecondaryText" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp">
+
+                                <Button
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/table_secondary"
+                                    android:text="ciao mondo"
+                                    android:drawableLeft="" />
+                            </LinearLayout>
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="25dp"
+                                android:layout_weight="0"
+                                android:background="@color/colorTransparent" />
+                        </LinearLayout>
+                        <!- -   -->
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</LinearLayout>

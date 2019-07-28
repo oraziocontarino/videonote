@@ -3,6 +3,7 @@ package com.videonote.utils;
 import android.content.Context;
 import android.media.MediaRecorder;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 
 import com.videonote.database.dto.RecordDTO;
 
@@ -105,5 +106,10 @@ public class MediaRecorderManager {
         totalRecordingTime = 0L;
         recording = false;
     }
+
+
+
+
+
 
 }

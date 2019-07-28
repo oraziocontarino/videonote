@@ -1,4 +1,4 @@
-package com.videonote.view.fragments.audio.recorder;
+package com.videonote.view.fragments.video.recorder;
 
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,35 +9,49 @@ import com.videonote.database.dto.RecordDTO;
 import com.videonote.database.repositories.RecordRepository;
 import com.videonote.utils.FileUtils;
 import com.videonote.utils.MediaRecorderManager;
+import com.videonote.utils.MediaVideoManager;
 import com.videonote.view.fragments.audio.AudioManager;
+import com.videonote.view.fragments.audio.recorder.AudioRecorderListManager;
 
-public class AudioRecorderManager extends AudioManager {
+public class VideoRecorderManager extends AudioManager {
     private MediaRecorderManager mediaRecorderManager;
     private RecordRepository recordRepository;
-    private AudioRecorderListManager noteList;
+    private MediaVideoManager mediaVideoManager;
+    //private AudioRecorderListManager noteList;
 
-    public AudioRecorderManager(Fragment fragment){
-        super(fragment, R.id.audioRecordStatusLabel, R.id.audioRecordStatusValue, R.id.audioRecordStartButton, R.id.audioRecordStopButton, R.id.audioRecordPauseButton, R.id.audioRecordResumeButton);
+    public VideoRecorderManager(Fragment fragment){
+        super(
+                fragment,
+                R.id.videoRecordStatusLabel,
+                R.id.videoRecordStatusValue,
+                R.id.videoRecordStartButton,
+                R.id.videoRecordStopButton,
+                R.id.videoRecordPauseButton,
+                R.id.videoRecordResumeButton
+        );
+        mediaVideoManager = new MediaVideoManager(fragment);
         // Init Database
         recordRepository = DatabaseManager.getInstance(getContext()).getRecordRepository();
 
         mediaRecorderManager = MediaRecorderManager.getInstance(getView().getContext());
 
         // Init recording list
-        noteList = new AudioRecorderListManager(fragment);
-        noteList.updateButtons(false);
+//        noteList = new AudioRecorderListManager(fragment);
+//        noteList.updateButtons(false);
 
+        mediaVideoManager.openCamera();
         updateButton(true,false,false,false);
     }
 
     @Override
     protected void startAction(){
         try{
-            noteList.clean();
-            noteList.updateRecordDTO(FileUtils.getFilePath(getContext(), "audio.3gp", true));
-            mediaRecorderManager.startAudioRecording(noteList.getRecordDTO());
-            recordRepository.insert(noteList.getRecordDTO());
-            noteList.updateButtons(true);
+            //noteList.clean();
+            //noteList.updateRecordDTO(FileUtils.getFilePath(getContext(), "video.mp4", true));
+            //mediaRecorderManager.startAudioRecording(noteList.getRecordDTO());
+            //recordRepository.insert(noteList.getRecordDTO());
+            //noteList.updateButtons(true);
+            mediaVideoManager.startRecordingVideo();
             statusLabel = "RECORDING";
             updateButton(false,true,true,false);
         }catch(Exception e){
@@ -51,7 +65,8 @@ public class AudioRecorderManager extends AudioManager {
 
     @Override
     protected void stopAction(){
-        MediaRecorderManager.getInstance(getContext()).stopAudioRecording();
+        mediaVideoManager.stopRecordingVideo();
+        //MediaRecorderManager.getInstance(getContext()).stopAudioRecording();
         statusLabel = "STOPPED";
         updateButton(true,false,false,false);
     }
@@ -73,7 +88,7 @@ public class AudioRecorderManager extends AudioManager {
     protected void clean(){
         super.clean();
         mediaRecorderManager.clean();
-        noteList.clean();
+        //noteList.clean();
     }
 
     @Override
