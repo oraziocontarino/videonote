@@ -34,6 +34,7 @@ public class AudioRecorderManager extends AudioManager {
     @Override
     protected void startAction(){
         try{
+            noteList.clean();
             noteList.updateRecordDTO(FileUtils.getFilePath(getContext(), "audio.3gp", true));
             mediaRecorderManager.startAudioRecording(noteList.getRecordDTO());
             recordRepository.insert(noteList.getRecordDTO());

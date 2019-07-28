@@ -54,6 +54,7 @@ public class AudioPlayerManager extends AudioManager {
 
         // Init Database
         recordRepository = DatabaseManager.getInstance(getContext()).getRecordRepository();
+        noteRepository = DatabaseManager.getInstance(getContext()).getNoteRepository();
 
         mediaPlayerManager = MediaPlayerManager.getInstance(getView().getContext());
         noteRepository = DatabaseManager.getInstance(getContext()).getNoteRepository();
@@ -163,16 +164,15 @@ public class AudioPlayerManager extends AudioManager {
         }
 
         if(nextNote.getType().equals(Common.NOTE_TYPE.TEXT.name())){
-            Toast.makeText(getContext(), "Update text note!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "Update text note!", Toast.LENGTH_SHORT).show();
             String text = FileUtils.readTextFile(fragment, nextNote.getFileName());
-            //textAttachment.setText(text);
-            //attachments.setVisibility(View.VISIBLE);
-            //imageAttachment.setVisibility(View.GONE);
-            //textAttachment.setVisibility(View.VISIBLE);
+            textAttachment.setText(text);
+            attachments.setVisibility(View.VISIBLE);
+            imageAttachment.setVisibility(View.GONE);
+            textAttachment.setVisibility(View.VISIBLE);
             nextNote = null;
         }else if(nextNote.getType().equals(Common.NOTE_TYPE.PICTURE.name())){
-            noteRepository = DatabaseManager.getInstance(getContext()).getNoteRepository();
-            Toast.makeText(getContext(), "Update picture note!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "Update picture note!", Toast.LENGTH_SHORT).show();
             Bitmap pictureNote = FileUtils.readPictureFile(fragment, nextNote.getFileName());
             imageAttachment.setImageBitmap(pictureNote);
             attachments.setVisibility(View.VISIBLE);

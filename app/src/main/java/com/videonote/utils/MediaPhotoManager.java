@@ -65,6 +65,7 @@ public class MediaPhotoManager {
     private HandlerThread mBackgroundThread;
     public static final int PICTURE_WIDTH = 640;
     public static final int PICTURE_HEIGHT = 480;
+    private boolean ready;
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -81,6 +82,7 @@ public class MediaPhotoManager {
         textureView.setSurfaceTextureListener(textureListener);
         takePictureButton = (Button) getView().findViewById(R.id.cameraCaptureButton);
         assert takePictureButton != null;
+        this.ready = true;
 
     }
 
@@ -151,9 +153,11 @@ public class MediaPhotoManager {
     }
 
     public void takePicture(NoteDTO noteDTO) {
-        if (null == cameraDevice) {
+        if (null == cameraDevice || !ready) {
             return;
         }
+
+        ready = false;
         CameraManager manager = (CameraManager) getContext().getSystemService(Context.CAMERA_SERVICE);
         try {
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraDevice.getId());
@@ -222,6 +226,7 @@ public class MediaPhotoManager {
                     super.onCaptureCompleted(session, request, result);
                     Toast.makeText(getActivity(), "Saved:" + file, Toast.LENGTH_SHORT).show();
                     createCameraPreview();
+                    ready = true;
                 }
             };
             cameraDevice.createCaptureSession(outputSurfaces, new CameraCaptureSession.StateCallback() {
@@ -351,6 +356,11 @@ public class MediaPhotoManager {
 
     private Activity getActivity(){
         return fragment.getActivity();
+    }
+
+
+    public boolean isReady(){
+        return ready;
     }
 }
 

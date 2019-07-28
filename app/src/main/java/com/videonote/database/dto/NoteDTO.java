@@ -10,6 +10,14 @@ public class NoteDTO {
     public NoteDTO(){
 
     }
+    public NoteDTO(NoteDTO note){
+        this.id = note.getId();
+        this.recordId = note.getId();
+        this.type = note.getType();
+        this.startTime = note.getStartTime();
+        this.fileName = note.getFileName();
+    }
+
     public NoteDTO(long id, String fileName, long startTime, long recordId, String type){
         this.id = id;
         this.fileName = fileName;

@@ -1,14 +1,17 @@
 package com.videonote.view.fragments.audio.recorder;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.videonote.Common;
 import com.videonote.database.DatabaseManager;
@@ -48,11 +51,14 @@ public class AudioRecorderListManager {
 
         addTextNoteButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                if(noteText == null || noteText.getText().toString().trim().length() == 0){
+                    return;
+                }
                 updateTextNoteDTO();
                 storeTextNoteToFile();
                 storeNoteToDB();
                 addNoteToList();
-                noteText.setText("");
+                clearNoteText(true);
             }
         });
 
@@ -62,26 +68,45 @@ public class AudioRecorderListManager {
                 cameraOpenButton.setVisibility(View.GONE);
                 cameraCloseButton.setVisibility(View.VISIBLE);
                 cameraCaptureButton.setVisibility(View.VISIBLE);
+                clearNoteText(false);
 
             }
         });
         cameraCloseButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                mediaPhotoManager.closeCamera();
-                cameraOpenButton.setVisibility(View.VISIBLE);
-                cameraCloseButton.setVisibility(View.GONE);
-                cameraCaptureButton.setVisibility(View.GONE);
+                closeCameraAction();
             }
         });
         cameraCaptureButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                updatePictureNoteDTO();;
+                if(!mediaPhotoManager.isReady()){
+                    return;
+                }
+                updatePictureNoteDTO();
                 storePictureNoteToFile();
                 storeNoteToDB();
                 addNoteToList();
+                clearNoteText(false);
             }
         });
 
+    }
+    private void clearNoteText(boolean clearText){
+        if(clearText) {
+            noteText.setText("");
+        }
+        //noteText.clearAnimation();
+        //noteText.clearComposingText();
+        //noteText.clearFocus();
+        noteText.onEditorAction(EditorInfo.IME_ACTION_DONE);
+    }
+
+    private void closeCameraAction(){
+        mediaPhotoManager.closeCamera();
+        cameraOpenButton.setVisibility(View.VISIBLE);
+        cameraCloseButton.setVisibility(View.GONE);
+        cameraCaptureButton.setVisibility(View.GONE);
+        noteText.onEditorAction(EditorInfo.IME_ACTION_DONE);
     }
 
     private void updateTextNoteDTO(){
@@ -136,21 +161,14 @@ public class AudioRecorderListManager {
         return label;
     }
 
-    private Button generateButton(final LinearLayout wrapper){
+    private Button generateButton(LinearLayout wrapper){
         Button button = new Button(fragment.getContext());
         button.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 1.0f
         ));
-        button.setOnClickListener(new View.OnClickListener() {
-            private NoteDTO toDelete = noteDTO;
-            public void onClick(View v) {
-                Log.d("AUDIO", "BUTTON PRESSED!");
-                FileUtils.deleteFile(getContext(), toDelete.getFileName());
-                noteList.removeView(wrapper);
-            }
-        });
+        button.setOnClickListener(new AudioRecorderListButtonListener(fragment, wrapper, noteList, noteDTO.getFileName()));
         button.setText("Remove");
         return button;
     }
@@ -174,11 +192,15 @@ public class AudioRecorderListManager {
 
     public void clean(){
         noteList.removeAllViewsInLayout();
-        noteText.setText("");
+        clearNoteText(true);
+        closeCameraAction();
         updateButtons(false);
     }
 
     private Context getContext(){
         return fragment.getContext();
+    }
+    private Activity getActivity(){
+        return fragment.getActivity();
     }
 }
