@@ -1,4 +1,4 @@
-package com.videonote.view.fragments.audio.recorder.list;
+package com.videonote.view.fragments.common.list;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -8,14 +8,14 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import com.videonote.utils.FileUtils;
 
-public class AudioRecorderListButtonListener implements OnClickListener{
+public class MediaRecorderListButtonListener implements OnClickListener{
     private Fragment fragment;
     private LinearLayout wrapper;
     private LinearLayout noteList;
     private String toDelete;
 
     // = new NoteDTO();
-    public AudioRecorderListButtonListener(Fragment fragment, LinearLayout wrapper, LinearLayout noteList, String toDelete){
+    public MediaRecorderListButtonListener(Fragment fragment, LinearLayout wrapper, LinearLayout noteList, String toDelete){
         this.fragment = fragment;
         this.wrapper = wrapper;
         this.noteList = noteList;

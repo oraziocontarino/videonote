@@ -1,4 +1,4 @@
-package com.videonote.view.fragments.utils;
+package com.videonote.view.fragments.common;
 
 import android.support.v4.app.Fragment;
 import android.view.View;

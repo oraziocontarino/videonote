@@ -18,7 +18,7 @@ import com.videonote.database.repositories.NoteRepository;
 import com.videonote.database.repositories.RecordRepository;
 import com.videonote.utils.FileUtils;
 import com.videonote.view.fragments.audio.AudioMediaPlayerManager;
-import com.videonote.view.fragments.utils.MediaPlayerUIController;
+import com.videonote.view.fragments.common.MediaPlayerUIController;
 import com.videonote.view.fragments.audio.player.list.AudioPlayerListRow;
 
 import java.util.List;

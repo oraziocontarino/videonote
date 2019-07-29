@@ -7,10 +7,9 @@ import com.videonote.R;
 import com.videonote.database.DatabaseManager;
 import com.videonote.database.dto.RecordDTO;
 import com.videonote.database.repositories.RecordRepository;
-import com.videonote.view.fragments.audio.recorder.list.AudioRecorderListManager;
 import com.videonote.view.fragments.audio.AudioMediaRecorderManager;
 import com.videonote.utils.FileUtils;
-import com.videonote.view.fragments.utils.MediaRecorderUIController;
+import com.videonote.view.fragments.common.MediaRecorderUIController;
 
 public class AudioRecorderController extends MediaRecorderUIController {
     private AudioMediaRecorderManager audioMediaRecorderManager;

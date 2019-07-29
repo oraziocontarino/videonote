@@ -7,13 +7,14 @@ import com.videonote.R;
 import com.videonote.database.DatabaseManager;
 import com.videonote.database.dto.RecordDTO;
 import com.videonote.database.repositories.RecordRepository;
+import com.videonote.utils.FileUtils;
 import com.videonote.view.fragments.video.VideoMediaRecorderManager;
-import com.videonote.view.fragments.utils.MediaRecorderUIController;
+import com.videonote.view.fragments.common.MediaRecorderUIController;
 
 public class VideoRecorderController extends MediaRecorderUIController {
     private VideoMediaRecorderManager videoMediaRecorderManager;
     private RecordRepository recordRepository;
-    //private AudioRecorderListManager noteList;
+    private VideoRecorderListManager noteList;
 
     public VideoRecorderController(Fragment fragment){
         super(
@@ -30,20 +31,19 @@ public class VideoRecorderController extends MediaRecorderUIController {
         videoMediaRecorderManager.openCamera();
 
         // Init recording list
-//        noteList = new AudioRecorderListManager(fragment);
-//        noteList.updateButtons(false);
+        noteList = new VideoRecorderListManager(fragment);
+        noteList.updateButtons(false);
         updateButton(true,false);
     }
 
     @Override
     protected void startAction(){
         try{
-            //noteList.clean();
-            //noteList.updateRecordDTO(FileUtils.getFilePath(getContext(), "video.mp4", true));
-            //            videoMediaRecorderManager.startVideoRecording(noteList.getRecordDTO());
-            videoMediaRecorderManager.startVideoRecording(null);
-            //recordRepository.insert(noteList.getRecordDTO());
-            //noteList.updateButtons(true);
+            noteList.clean();
+            noteList.updateRecordDTO(FileUtils.getFilePath(getContext(), "video.mp4", true));
+            videoMediaRecorderManager.startVideoRecording(noteList.getRecordDTO());
+            recordRepository.insert(noteList.getRecordDTO());
+            noteList.updateButtons(true);
             statusLabel = "RECORDING";
             updateButton(false,true);
         }catch(Exception e){
@@ -66,7 +66,7 @@ public class VideoRecorderController extends MediaRecorderUIController {
     protected void clean(){
         super.clean();
         videoMediaRecorderManager.clean();
-        //noteList.clean();
+        noteList.clean();
     }
 
     @Override
