@@ -5,13 +5,14 @@ import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 
 import com.videonote.database.dto.RecordDTO;
+import com.videonote.utils.MediaVideoManager;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class VideoMediaRecorderManager {
     private static VideoMediaRecorderManager instance = null;
-    private VideoMediaRecorderController videoMediaRecorderController;
+    private MediaVideoManager mediaVideoManager;
     private Context context;
     private Long startTime = 0L;
     private Long totalRecordingTime = 0L;
@@ -19,7 +20,7 @@ public class VideoMediaRecorderManager {
 
     private VideoMediaRecorderManager(Fragment fragment){
         this.context = fragment.getContext();
-        videoMediaRecorderController = new VideoMediaRecorderController(fragment);
+        mediaVideoManager = new MediaVideoManager(fragment);
         recording = false;
     }
 
@@ -35,28 +36,17 @@ public class VideoMediaRecorderManager {
         this.context = context;
     }
     public void openCamera() {
-        videoMediaRecorderController.openCamera();
+        mediaVideoManager.openCamera();
     }
 
     public void startVideoRecording(RecordDTO record) throws Exception{
-        videoMediaRecorderController.startRecordingVideo();
+        mediaVideoManager.startRecordingVideo(record);
         recording = true;
         initTime();
     }
 
-    public void pauseAudioRecording(){
-        videoMediaRecorderController.onPause();
-        startTime = 0L;
-        recording = false;
-    }
-
-    public void resumeAudioRecording(){
-        videoMediaRecorderController.onResume();
-        startTime = SystemClock.uptimeMillis();
-        recording = true;
-    }
-    public void stopAudioRecording(){
-        videoMediaRecorderController.stopRecordingVideo();
+    public void stopVideoRecording(){
+        mediaVideoManager.stopRecordingVideo();
         recording = false;
     }
 
@@ -92,7 +82,7 @@ public class VideoMediaRecorderManager {
     public void clean(){
         if(totalRecordingTime != 0L){
             if(recording) {
-                stopAudioRecording();
+                stopVideoRecording();
             }
         }
         startTime = 0L;

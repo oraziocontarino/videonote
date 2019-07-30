@@ -19,7 +19,7 @@ import com.videonote.database.repositories.RecordRepository;
 import com.videonote.utils.FileUtils;
 import com.videonote.view.fragments.audio.AudioMediaPlayerManager;
 import com.videonote.view.fragments.common.MediaPlayerUIController;
-import com.videonote.view.fragments.audio.player.list.AudioPlayerListRow;
+import com.videonote.view.fragments.common.player.list.MediaPlayerListRow;
 
 import java.util.List;
 import java.util.Stack;
@@ -182,11 +182,11 @@ public class AudioPlayerController extends MediaPlayerUIController {
         recordsList = getView().findViewById(R.id.audioPlayerRecordsContainer);
         List<RecordDTO> records = recordRepository.getByType(Common.RECORD_TYPE.AUDIO);
         for(final RecordDTO record : records){
-            recordsList.addView(new AudioPlayerListRow(this, record));
+            recordsList.addView(new MediaPlayerListRow(this, getContext(), record));
         }
     }
 
-    public void removeRow(AudioPlayerListRow row){
+    public void removeRow(MediaPlayerListRow row){
         recordsList.removeView(row);
     }
 }

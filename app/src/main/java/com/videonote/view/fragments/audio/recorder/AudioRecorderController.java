@@ -3,6 +3,7 @@ package com.videonote.view.fragments.audio.recorder;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
+import com.videonote.Common;
 import com.videonote.R;
 import com.videonote.database.DatabaseManager;
 import com.videonote.database.dto.RecordDTO;
@@ -33,7 +34,7 @@ public class AudioRecorderController extends MediaRecorderUIController {
     protected void startAction(){
         try{
             noteList.clean();
-            noteList.updateRecordDTO(FileUtils.getFilePath(getContext(), "audio.3gp", true));
+            noteList.updateRecordDTO(FileUtils.getFilePath(getContext(), "audio.3gp", true), Common.RECORD_TYPE.AUDIO);
             audioMediaRecorderManager.startAudioRecording(noteList.getRecordDTO());
             recordRepository.insert(noteList.getRecordDTO());
             noteList.updateButtons(true);

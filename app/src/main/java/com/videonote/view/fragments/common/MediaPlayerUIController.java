@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.videonote.database.dto.RecordDTO;
+import com.videonote.view.fragments.common.player.list.MediaPlayerListRow;
 
 public abstract class MediaPlayerUIController extends MediaUIController {
     protected Button pauseButton;
@@ -42,9 +43,10 @@ public abstract class MediaPlayerUIController extends MediaUIController {
         });
     }
 
-    protected abstract void startAction(RecordDTO record);
-    protected abstract void startAction();
-    protected abstract void stopAction();
+    public abstract void startAction(RecordDTO record);
+    public abstract void startAction();
+    public abstract void stopAction();
+    public abstract void removeRow(MediaPlayerListRow row);
     protected abstract void pauseAction();
     protected abstract void resumeAction();
     protected abstract void updateHeaderTime();

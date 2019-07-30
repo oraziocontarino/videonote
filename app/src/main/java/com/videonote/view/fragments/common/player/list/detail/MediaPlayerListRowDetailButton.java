@@ -1,4 +1,4 @@
-package com.videonote.view.fragments.audio.player.list.detail;
+package com.videonote.view.fragments.common.player.list.detail;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -10,11 +10,11 @@ import android.widget.TextView;
 import com.videonote.database.dto.NoteDTO;
 import com.videonote.R;
 
-public class AudioPlayerListRowDetailButton extends AudioPlayerListRowDetail {
+public class MediaPlayerListRowDetailButton extends MediaPlayerListRowDetail {
     private TextView header;
     private Button button;
     private Drawable image;
-    public AudioPlayerListRowDetailButton(Context context, String label, int resourceImage, NoteDTO note, OnClickListener listener){
+    public MediaPlayerListRowDetailButton(Context context, String label, int resourceImage, NoteDTO note, OnClickListener listener){
         super(context, note);
 
         image = ContextCompat.getDrawable(getContext(), resourceImage);

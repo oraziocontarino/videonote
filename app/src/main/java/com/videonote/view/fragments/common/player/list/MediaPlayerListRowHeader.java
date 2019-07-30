@@ -1,4 +1,4 @@
-package com.videonote.view.fragments.audio.player.list;
+package com.videonote.view.fragments.common.player.list;
 
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -17,25 +17,26 @@ import com.videonote.database.repositories.NoteRepository;
 import com.videonote.database.repositories.RecordRepository;
 import com.videonote.utils.FileUtils;
 import com.videonote.view.fragments.audio.player.AudioPlayerController;
+import com.videonote.view.fragments.common.MediaPlayerUIController;
 
 import java.util.List;
 
-public class AudioPlayerListRowHeader extends LinearLayout {
+public class MediaPlayerListRowHeader extends LinearLayout {
     private LayoutParams layout;
     private TextView title;
     private ImageButton playButton;
     private ImageButton deleteButton;
     private ImageButton moreButton;
     private ImageButton lessButton;
-    private AudioPlayerController manager;
-    private AudioPlayerListRow row;
+    private MediaPlayerUIController manager;
+    private MediaPlayerListRow row;
     private RecordRepository recordRepository;
     private NoteRepository noteRepository;
 
     //Top UI
     private RecordDTO record;
 
-    public AudioPlayerListRowHeader(AudioPlayerListRow row, AudioPlayerController manager, RecordDTO record){
+    public MediaPlayerListRowHeader(MediaPlayerListRow row, MediaPlayerUIController manager, RecordDTO record){
         super(manager.getContext());
         this.record = record;
         this.manager = manager;

@@ -1,6 +1,5 @@
-package com.videonote.view.fragments.common.list;
+package com.videonote.view.fragments.common.recorder.list;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -16,9 +15,7 @@ import com.videonote.database.DatabaseManager;
 import com.videonote.database.dto.NoteDTO;
 import com.videonote.database.repositories.NoteRepository;
 import com.videonote.database.dto.RecordDTO;
-import com.videonote.R;
 import com.videonote.utils.FileUtils;
-import com.videonote.utils.MediaPhotoManager;
 import com.videonote.view.fragments.audio.AudioMediaRecorderManager;
 
 public abstract class MediaRecorderList {
@@ -119,9 +116,9 @@ public abstract class MediaRecorderList {
         return button;
     }
 
-    public void updateRecordDTO(String fileName){
+    public void updateRecordDTO(String fileName, Common.RECORD_TYPE type){
         this.recordDTO.setFileName(fileName);
-        this.recordDTO.setType(Common.RECORD_TYPE.AUDIO.name());
+        this.recordDTO.setType(type.name());
     }
     public void updateRecordDTO(long id){
         this.recordDTO.setId(id);

@@ -67,6 +67,22 @@
         android:layout_weight="0"
         android:background="@color/colorTransparent" />
 
+    <TextureView
+        android:id="@+id/textureView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_weight="0"
+        android:background="@color/colorTransparent" />
+
     <ScrollView
         android:id="@+id/attachments"
         android:layout_width="match_parent"
@@ -88,15 +104,6 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:visibility="gone" />
-
-            <ImageView
-                android:id="@+id/imageAttachment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="100"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
     <View

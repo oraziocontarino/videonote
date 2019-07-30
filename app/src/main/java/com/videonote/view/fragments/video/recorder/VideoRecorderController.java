@@ -3,6 +3,7 @@ package com.videonote.view.fragments.video.recorder;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
+import com.videonote.Common;
 import com.videonote.R;
 import com.videonote.database.DatabaseManager;
 import com.videonote.database.dto.RecordDTO;
@@ -40,7 +41,7 @@ public class VideoRecorderController extends MediaRecorderUIController {
     protected void startAction(){
         try{
             noteList.clean();
-            noteList.updateRecordDTO(FileUtils.getFilePath(getContext(), "video.mp4", true));
+            noteList.updateRecordDTO(FileUtils.getFilePath(getContext(), "video.mp4", true), Common.RECORD_TYPE.VIDEO);
             videoMediaRecorderManager.startVideoRecording(noteList.getRecordDTO());
             recordRepository.insert(noteList.getRecordDTO());
             noteList.updateButtons(true);
@@ -57,7 +58,7 @@ public class VideoRecorderController extends MediaRecorderUIController {
 
     @Override
     protected void stopAction(){
-        videoMediaRecorderManager.stopAudioRecording();
+        videoMediaRecorderManager.stopVideoRecording();
         statusLabel = "STOPPED";
         updateButton(true,false);
     }

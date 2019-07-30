@@ -1,17 +1,16 @@
-package com.videonote.view.fragments.audio.player.list.detail;
+package com.videonote.view.fragments.common.player.list.detail;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.videonote.database.dto.NoteDTO;
 
-public class AudioPlayerListRowDetail extends LinearLayout {
+public class MediaPlayerListRowDetail extends LinearLayout {
     protected LinearLayout.LayoutParams layout;
     protected NoteDTO note;
     private final static int PADDING = 40;
-    public AudioPlayerListRowDetail(Context context, NoteDTO note){
+    public MediaPlayerListRowDetail(Context context, NoteDTO note){
         super(context);
         this.note = note;
         layout = new LinearLayout.LayoutParams(
@@ -24,7 +23,7 @@ public class AudioPlayerListRowDetail extends LinearLayout {
         super.setVisibility(View.GONE);
         super.setPadding(PADDING,0, PADDING, 0);
     }
-    public AudioPlayerListRowDetail(Context context){
+    public MediaPlayerListRowDetail(Context context){
         this(context, null);
     }
 }

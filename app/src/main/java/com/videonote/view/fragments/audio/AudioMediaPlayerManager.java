@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.MediaPlayer;
 
 import com.videonote.database.dto.RecordDTO;
+import com.videonote.utils.TimeUtils;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -74,17 +75,7 @@ public class AudioMediaPlayerManager {
 
     public String getFormattedTime(){
         long millis = mediaPlayer.getCurrentPosition();
-        return getFormattedTime(millis);
-    }
-    public static String getFormattedTime(long millis){
-        String time = String.format(Locale.ITALY, "%02d:%02d:%02d",
-                TimeUnit.MILLISECONDS.toHours(millis),
-                TimeUnit.MILLISECONDS.toMinutes(millis) -
-                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
-                TimeUnit.MILLISECONDS.toSeconds(millis) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
-
-        return String.valueOf(time);
+        return TimeUtils.getFormattedTime(millis);
     }
 
     public void clean(){

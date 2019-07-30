@@ -1,4 +1,4 @@
-package com.videonote.view.fragments.audio.player.list.detail;
+package com.videonote.view.fragments.common.player.list.detail;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -7,12 +7,11 @@ import android.widget.TextView;
 
 import com.videonote.R;
 import com.videonote.database.dto.NoteDTO;
-import com.videonote.view.fragments.audio.player.list.detail.AudioPlayerListRowDetail;
 
-public class AudioPlayerListRowDetailText extends AudioPlayerListRowDetail {
+public class MediaPlayerListRowDetailText extends MediaPlayerListRowDetail {
     private TextView header;
     private TextView content;
-    public AudioPlayerListRowDetailText(Context context, String headerLabel, String contentLabel, NoteDTO note){
+    public MediaPlayerListRowDetailText(Context context, String headerLabel, String contentLabel, NoteDTO note){
         super(context, note);
         header = generateColumn(headerLabel, 70);
         content = generateColumn(contentLabel, 30);

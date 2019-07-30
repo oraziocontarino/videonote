@@ -1,4 +1,4 @@
-package com.videonote.view.fragments.common.list;
+package com.videonote.view.fragments.common.recorder.list;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;

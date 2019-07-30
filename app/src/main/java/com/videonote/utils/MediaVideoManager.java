@@ -1,4 +1,4 @@
-package com.videonote.view.fragments.video;
+package com.videonote.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.videonote.R;
+import com.videonote.database.dto.RecordDTO;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +39,7 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-public class VideoMediaRecorderController {
+public class MediaVideoManager {
     private Fragment fragment;
     public static final int VIDEO_WIDTH = 640;
     public static final int VIDEO_HEIGHT = 480;
@@ -411,7 +412,7 @@ public class VideoMediaRecorderController {
         mTextureView.setTransform(matrix);
     }
 
-    private void setUpMediaRecorder() throws IOException {
+    private void setUpMediaRecorder(RecordDTO record) throws IOException {
         final Activity activity = getActivity();
         if (null == activity) {
             return;
@@ -420,7 +421,7 @@ public class VideoMediaRecorderController {
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         if (mNextVideoAbsolutePath == null || mNextVideoAbsolutePath.isEmpty()) {
-            mNextVideoAbsolutePath = getVideoFilePath(getActivity());
+            mNextVideoAbsolutePath = record.getFileName();
         }
         mMediaRecorder.setOutputFile(mNextVideoAbsolutePath);
         mMediaRecorder.setVideoEncodingBitRate(10000000);
@@ -441,18 +442,19 @@ public class VideoMediaRecorderController {
     }
 
     private String getVideoFilePath(Context context) {
+        FileUtils.getFilePath(context, "video_recording", true);
         final File dir = context.getExternalFilesDir(null);
         return (dir == null ? "" : (dir.getAbsolutePath() + "/"))
                 + System.currentTimeMillis() + ".mp4";
     }
 
-    public void startRecordingVideo() {
+    public void startRecordingVideo(RecordDTO record) {
         if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
             return;
         }
         try {
             closePreviewSession();
-            setUpMediaRecorder();
+            setUpMediaRecorder(record);
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
             assert texture != null;
             texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
@@ -553,7 +555,7 @@ public class VideoMediaRecorderController {
 
     }
 
-    public VideoMediaRecorderController(Fragment fragment) {
+    public MediaVideoManager(Fragment fragment) {
         this.fragment = fragment;
         mTextureView = getView().findViewById(R.id.videoCameraPreviewTextureView);
     }
