@@ -9,8 +9,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.videonote.R;
+import com.videonote.view.fragments.HomeFragment;
 
 public class VideoRecorder extends Fragment {
+    private static VideoRecorder instance;
+
+    public static VideoRecorder getInstance(){
+        if(instance == null){
+            instance = new VideoRecorder();
+        }
+        return instance;
+    }
+
     private VideoRecorderController videoRecorderController;
     private OnFragmentInteractionListener mListener;
 

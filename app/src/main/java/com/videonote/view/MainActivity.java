@@ -97,19 +97,19 @@ public class MainActivity extends AppCompatActivity implements
         Fragment fragment = null;
         switch(item.getItemId()){
             case R.id.nav_home:
-                fragment = new HomeFragment();
+                fragment = HomeFragment.getInstance();
                 break;
             case R.id.nav_audio_player:
-                fragment = new AudioPlayer();
+                fragment = AudioPlayer.getInstance();
                 break;
             case R.id.nav_audio_recorder:
-                fragment = new AudioRecorder();
+                fragment = AudioRecorder.getInstance();
                 break;
             case R.id.nav_video_player:
-                fragment = new VideoPlayer();
+                fragment = VideoPlayer.getInstance();
                 break;
             case R.id.nav_video_recorder:
-                fragment = new VideoRecorder();
+                fragment = VideoRecorder.getInstance();
                 break;
             case R.id.nav_exit:
                 System.exit(0);

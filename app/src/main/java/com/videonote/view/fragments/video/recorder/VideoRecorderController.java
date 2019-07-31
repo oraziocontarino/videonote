@@ -38,6 +38,10 @@ public class VideoRecorderController extends MediaRecorderUIController {
         updateButton(true,false);
     }
 
+    public void reloadFragment(){
+        videoMediaRecorderManager.openCamera();
+    }
+
     @Override
     protected void startAction(){
         try{

@@ -9,8 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.videonote.R;
+import com.videonote.view.fragments.video.recorder.VideoRecorder;
+import com.videonote.view.fragments.video.recorder.VideoRecorderController;
 
 public class VideoPlayer extends Fragment {
+    private static VideoPlayer instance;
+
+    public static VideoPlayer getInstance(){
+        if(instance == null){
+            instance = new VideoPlayer();
+        }
+        return instance;
+    }
+
     // Header UI - common to Recorder
     private VideoPlayerController videoPlayerController;
 

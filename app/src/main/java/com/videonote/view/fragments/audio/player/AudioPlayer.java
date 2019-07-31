@@ -9,8 +9,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.videonote.R;
+import com.videonote.view.fragments.video.player.VideoPlayer;
 
 public class AudioPlayer extends Fragment {
+    private static AudioPlayer instance;
+
+    public static AudioPlayer getInstance(){
+        if(instance == null){
+            instance = new AudioPlayer();
+        }
+        return instance;
+    }
+
     // Header UI - common to Recorder
     private AudioPlayerController audioPlayerManager;
 

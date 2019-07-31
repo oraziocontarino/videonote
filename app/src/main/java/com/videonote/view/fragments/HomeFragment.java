@@ -10,6 +10,15 @@ import com.videonote.R;
 
 
 public class HomeFragment extends Fragment {
+    private static HomeFragment instance;
+
+    public static HomeFragment getInstance(){
+        if(instance == null){
+            instance = new HomeFragment();
+        }
+        return instance;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

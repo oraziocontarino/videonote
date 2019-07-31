@@ -73,31 +73,6 @@ public class MediaVideoManager {
     private CameraDevice mCameraDevice;
     private CameraCaptureSession mPreviewSession;
 
-    private TextureView.SurfaceTextureListener mSurfaceTextureListener
-            = new TextureView.SurfaceTextureListener() {
-
-        @Override
-        public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture,
-                                              int width, int height) {
-        }
-
-        @Override
-        public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture,
-                                                int width, int height) {
-            configureTransform(width, height);
-        }
-
-        @Override
-        public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
-            return true;
-        }
-
-        @Override
-        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-        }
-
-    };
-
 
     /**
      * The {@link android.util.Size} of camera preview.
@@ -205,10 +180,9 @@ public class MediaVideoManager {
 
     public void onResume() {
         startBackgroundThread();
-        if (mTextureView.isAvailable()) {
+        if (!mTextureView.isAvailable()) {
+            mTextureView = getView().findViewById(R.id.videoCameraPreviewTextureView);
             openCamera();
-        } else {
-            mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
         }
     }
 
@@ -302,7 +276,7 @@ public class MediaVideoManager {
         }
     }
 
-    private void closeCamera() {
+    public void closeCamera() {
         try {
             mCameraOpenCloseLock.acquire();
             closePreviewSession();

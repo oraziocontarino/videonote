@@ -24,7 +24,7 @@ public class VideoMediaRecorderManager extends MediaRecorderManager{
         return instance;
     }
     public void openCamera() {
-        mediaVideoManager.openCamera();
+        mediaVideoManager.onResume();
     }
 
     @Override
@@ -38,5 +38,11 @@ public class VideoMediaRecorderManager extends MediaRecorderManager{
     public void stopRecording(){
         mediaVideoManager.stopRecordingVideo();
         recording = false;
+    }
+
+    @Override
+    public void clean(){
+        mediaVideoManager.closeCamera();
+        super.clean();
     }
 }

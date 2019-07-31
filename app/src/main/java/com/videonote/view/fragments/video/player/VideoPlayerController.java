@@ -63,8 +63,6 @@ public class VideoPlayerController extends MediaPlayerUIController {
         updateButton(false,false,false,false);
     }
 
-
-
     @Override
     public void startAction(RecordDTO record) {
         try{
@@ -176,6 +174,7 @@ public class VideoPlayerController extends MediaPlayerUIController {
     }
     private void initRecordsList(){
         recordsList = getView().findViewById(R.id.videoPlayerRecordsContainer);
+        recordsList.removeAllViews();
         List<RecordDTO> records = recordRepository.getByType(Common.RECORD_TYPE.VIDEO);
         for(final RecordDTO record : records){
             recordsList.addView(new MediaPlayerListRow(this, getContext(), record));

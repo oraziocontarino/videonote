@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -27,12 +28,12 @@ public class VideoMediaPlayerManager {
     private boolean paused;
     private TextureView textureView;
     private Surface surfaceView;
+
     private VideoMediaPlayerManager(Fragment fragment){
         this.fragment = fragment;
         mediaPlayer = new MediaPlayer();
         dirty = false;
         textureView = getView().findViewById(R.id.textureView);
-
         textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
             @Override
             public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
@@ -46,17 +47,22 @@ public class VideoMediaPlayerManager {
             }
 
             @Override
-            public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i1) {}
+            public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i1) {
+                Log.d("aa","");}
 
             @Override
             public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
+                Log.d("aa","");
                 return false;
             }
 
             @Override
-            public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {}
+            public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+                Log.d("aa","");
+            }
         });
     }
+
 
     public static VideoMediaPlayerManager getInstance(Fragment fragment){
         if(instance == null){
@@ -73,11 +79,14 @@ public class VideoMediaPlayerManager {
         if (mediaPlayer != null) {
             mediaPlayer.reset();
         }
+        if(!textureView.isAvailable()){
+            textureView = getView().findViewById(R.id.textureView);
+            surfaceView = new Surface(textureView.getSurfaceTexture());
+        }
         mediaPlayer.setSurface(surfaceView);
         mediaPlayer.setDataSource(record.getFileName());
         mediaPlayer.prepare();
         mediaPlayer.start();
-
         dirty = true;
     }
 
