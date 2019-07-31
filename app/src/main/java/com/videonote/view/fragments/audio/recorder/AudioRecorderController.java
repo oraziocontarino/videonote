@@ -8,6 +8,7 @@ import com.videonote.R;
 import com.videonote.database.DatabaseManager;
 import com.videonote.database.dto.RecordDTO;
 import com.videonote.database.repositories.RecordRepository;
+import com.videonote.utils.TimeUtils;
 import com.videonote.view.fragments.audio.AudioMediaRecorderManager;
 import com.videonote.utils.FileUtils;
 import com.videonote.view.fragments.common.MediaRecorderUIController;
@@ -35,7 +36,7 @@ public class AudioRecorderController extends MediaRecorderUIController {
         try{
             noteList.clean();
             noteList.updateRecordDTO(FileUtils.getFilePath(getContext(), "audio.3gp", true), Common.RECORD_TYPE.AUDIO);
-            audioMediaRecorderManager.startAudioRecording(noteList.getRecordDTO());
+            audioMediaRecorderManager.startRecording(noteList.getRecordDTO());
             recordRepository.insert(noteList.getRecordDTO());
             noteList.updateButtons(true);
             statusLabel = "RECORDING";
@@ -51,7 +52,7 @@ public class AudioRecorderController extends MediaRecorderUIController {
 
     @Override
     protected void stopAction(){
-        AudioMediaRecorderManager.getInstance(getContext()).stopAudioRecording();
+        AudioMediaRecorderManager.getInstance(getContext()).stopRecording();
         statusLabel = "STOPPED";
         updateButton(true,false);
     }
@@ -65,7 +66,7 @@ public class AudioRecorderController extends MediaRecorderUIController {
 
     @Override
     protected void updateHeaderTime(){
-        headerTime = audioMediaRecorderManager == null ? "": audioMediaRecorderManager.getFormattedTime()+" - "+statusLabel;
+        headerTime = audioMediaRecorderManager == null ? "": TimeUtils.getFormattedTime(audioMediaRecorderManager.getTime())+" - "+statusLabel;
     }
 
     @Override

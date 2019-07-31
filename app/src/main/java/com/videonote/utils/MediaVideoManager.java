@@ -448,63 +448,58 @@ public class MediaVideoManager {
                 + System.currentTimeMillis() + ".mp4";
     }
 
-    public void startRecordingVideo(RecordDTO record) {
+    public void startRecordingVideo(RecordDTO record) throws Exception {
         if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
             return;
         }
-        try {
-            closePreviewSession();
-            setUpMediaRecorder(record);
-            SurfaceTexture texture = mTextureView.getSurfaceTexture();
-            assert texture != null;
-            texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
-            mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_RECORD);
-            List<Surface> surfaces = new ArrayList<>();
+        closePreviewSession();
+        setUpMediaRecorder(record);
+        SurfaceTexture texture = mTextureView.getSurfaceTexture();
+        assert texture != null;
+        texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+        mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_RECORD);
+        List<Surface> surfaces = new ArrayList<>();
 
-            // Set up Surface for the camera preview
-            Surface previewSurface = new Surface(texture);
-            surfaces.add(previewSurface);
-            mPreviewBuilder.addTarget(previewSurface);
+        // Set up Surface for the camera preview
+        Surface previewSurface = new Surface(texture);
+        surfaces.add(previewSurface);
+        mPreviewBuilder.addTarget(previewSurface);
 
-            // Set up Surface for the MediaRecorder
-            Surface recorderSurface = mMediaRecorder.getSurface();
-            surfaces.add(recorderSurface);
-            mPreviewBuilder.addTarget(recorderSurface);
+        // Set up Surface for the MediaRecorder
+        Surface recorderSurface = mMediaRecorder.getSurface();
+        surfaces.add(recorderSurface);
+        mPreviewBuilder.addTarget(recorderSurface);
 
-            // Start a capture session
-            // Once the session starts, we can update the UI and start recording
-            mCameraDevice.createCaptureSession(surfaces, new CameraCaptureSession.StateCallback() {
+        // Start a capture session
+        // Once the session starts, we can update the UI and start recording
+        mCameraDevice.createCaptureSession(surfaces, new CameraCaptureSession.StateCallback() {
 
-                @Override
-                public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
-                    mPreviewSession = cameraCaptureSession;
-                    updatePreview();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // UI
-                            //mButtonVideo.setText(R.string.stop);
-                            Toast.makeText(getContext(), "Change to stop!", Toast.LENGTH_SHORT).show();
-                            mIsRecordingVideo = true;
+            @Override
+            public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
+                mPreviewSession = cameraCaptureSession;
+                updatePreview();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // UI
+                        //mButtonVideo.setText(R.string.stop);
+                        Toast.makeText(getContext(), "Change to stop!", Toast.LENGTH_SHORT).show();
+                        mIsRecordingVideo = true;
 
-                            // Start recording
-                            mMediaRecorder.start();
-                        }
-                    });
-                }
-
-                @Override
-                public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
-                    Activity activity = getActivity();
-                    if (null != activity) {
-                        Toast.makeText(activity, "Failed", Toast.LENGTH_SHORT).show();
+                        // Start recording
+                        mMediaRecorder.start();
                     }
-                }
-            }, mBackgroundHandler);
-        } catch (CameraAccessException | IOException e) {
-            e.printStackTrace();
-        }
+                });
+            }
 
+            @Override
+            public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
+                Activity activity = getActivity();
+                if (null != activity) {
+                    Toast.makeText(activity, "Failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, mBackgroundHandler);
     }
 
     private void closePreviewSession() {

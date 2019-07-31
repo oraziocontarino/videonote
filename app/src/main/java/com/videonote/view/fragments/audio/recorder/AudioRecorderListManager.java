@@ -20,7 +20,13 @@ public class AudioRecorderListManager extends MediaRecorderList {
     private MediaPhotoManager mediaPhotoManager;
 
     public AudioRecorderListManager(Fragment fragment){
-        super(fragment, R.id.audioRecordNoteContainer, R.id.audioRecordTextButton, R.id.audioRecordTextInput);
+        super(
+                fragment,
+                AudioMediaRecorderManager.getInstance(fragment.getContext()),
+                R.id.audioRecordNoteContainer,
+                R.id.audioRecordTextButton,
+                R.id.audioRecordTextInput
+        );
         cameraOpenButton = fragment.getView().findViewById(R.id.cameraOpenButton);
         cameraCloseButton = fragment.getView().findViewById(R.id.cameraCloseButton);
         cameraCaptureButton = fragment.getView().findViewById(R.id.cameraCaptureButton);

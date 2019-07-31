@@ -9,6 +9,7 @@ import com.videonote.database.DatabaseManager;
 import com.videonote.database.dto.RecordDTO;
 import com.videonote.database.repositories.RecordRepository;
 import com.videonote.utils.FileUtils;
+import com.videonote.utils.TimeUtils;
 import com.videonote.view.fragments.video.VideoMediaRecorderManager;
 import com.videonote.view.fragments.common.MediaRecorderUIController;
 
@@ -42,7 +43,7 @@ public class VideoRecorderController extends MediaRecorderUIController {
         try{
             noteList.clean();
             noteList.updateRecordDTO(FileUtils.getFilePath(getContext(), "video.mp4", true), Common.RECORD_TYPE.VIDEO);
-            videoMediaRecorderManager.startVideoRecording(noteList.getRecordDTO());
+            videoMediaRecorderManager.startRecording(noteList.getRecordDTO());
             recordRepository.insert(noteList.getRecordDTO());
             noteList.updateButtons(true);
             statusLabel = "RECORDING";
@@ -58,7 +59,7 @@ public class VideoRecorderController extends MediaRecorderUIController {
 
     @Override
     protected void stopAction(){
-        videoMediaRecorderManager.stopVideoRecording();
+        videoMediaRecorderManager.stopRecording();
         statusLabel = "STOPPED";
         updateButton(true,false);
     }
@@ -72,7 +73,7 @@ public class VideoRecorderController extends MediaRecorderUIController {
 
     @Override
     protected void updateHeaderTime(){
-        headerTime = videoMediaRecorderManager == null ? "": videoMediaRecorderManager.getFormattedTime()+" - "+statusLabel;
+        headerTime = videoMediaRecorderManager == null ? "": TimeUtils.getFormattedTime(videoMediaRecorderManager.getTime())+" - "+statusLabel;
     }
 
     @Override

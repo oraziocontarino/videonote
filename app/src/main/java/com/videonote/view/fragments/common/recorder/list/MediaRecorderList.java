@@ -1,6 +1,7 @@
 package com.videonote.view.fragments.common.recorder.list;
 
 import android.content.Context;
+import android.media.MediaRecorder;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -17,6 +18,7 @@ import com.videonote.database.repositories.NoteRepository;
 import com.videonote.database.dto.RecordDTO;
 import com.videonote.utils.FileUtils;
 import com.videonote.view.fragments.audio.AudioMediaRecorderManager;
+import com.videonote.view.fragments.common.MediaRecorderManager;
 
 public abstract class MediaRecorderList {
     protected Fragment fragment;
@@ -27,29 +29,35 @@ public abstract class MediaRecorderList {
     protected EditText noteText;
     protected NoteRepository noteRepository;
     protected String noteSuffix;
+    protected MediaRecorderManager mediaRecorderManager;
 
-
-    public MediaRecorderList(Fragment fragment, int audioRecordNoteContainerId, int audioRecordTextButtonId, int audioRecordTextInputId){
-        noteList = fragment.getView().findViewById(audioRecordNoteContainerId);
-        addTextNoteButton = fragment.getView().findViewById(audioRecordTextButtonId);
-        noteText = fragment.getView().findViewById(audioRecordTextInputId);
+    public MediaRecorderList(Fragment fragment, MediaRecorderManager mediaRecorderManager, int recordNoteContainerId, int recordTextButtonId, int recordTextInputId){
+        noteList = fragment.getView().findViewById(recordNoteContainerId);
+        addTextNoteButton = fragment.getView().findViewById(recordTextButtonId);
+        noteText = fragment.getView().findViewById(recordTextInputId);
         noteDTO = new NoteDTO();
         recordDTO = new RecordDTO();
         noteRepository = DatabaseManager.getInstance(fragment.getContext()).getNoteRepository();
         this.fragment = fragment;
+        this.mediaRecorderManager = mediaRecorderManager;
 
         addTextNoteButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if(noteText == null || noteText.getText().toString().trim().length() == 0){
-                    return;
-                }
-                updateTextNoteDTO();
-                storeTextNoteToFile();
-                storeNoteToDB();
-                addNoteToList();
-                clearNoteText(true);
+                onClickEvt();
             }
         });
+    }
+
+    private void onClickEvt(){
+        if(noteText == null || noteText.getText().toString().trim().length() == 0){
+            return;
+        }
+        //AudioMediaRecorderManager.getInstance(getContext())
+        updateTextNoteDTO(mediaRecorderManager);
+        storeTextNoteToFile();
+        storeNoteToDB();
+        addNoteToList();
+        clearNoteText(true);
     }
 
     protected void clearNoteText(boolean clearText){
@@ -61,10 +69,10 @@ public abstract class MediaRecorderList {
 
 
 
-    protected void updateTextNoteDTO(){
+    protected void updateTextNoteDTO(MediaRecorderManager recorderManager){
         noteDTO.setFileName(FileUtils.getUniqueName("text_note.txt"));
         noteDTO.setRecordId(recordDTO.getId());
-        noteDTO.setStartTime(AudioMediaRecorderManager.getInstance(getContext()).getTime());
+        noteDTO.setStartTime(recorderManager.getTime());
         noteDTO.setType(Common.NOTE_TYPE.TEXT.name());
     }
 

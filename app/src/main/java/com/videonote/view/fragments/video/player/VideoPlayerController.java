@@ -35,7 +35,6 @@ public class VideoPlayerController extends MediaPlayerUIController {
     private Stack<NoteDTO> currentRecordNotesStack;
     private NoteDTO nextNote;
     private TextView textAttachment;
-    private ImageView imageAttachment;
     private ScrollView attachments;
     private LinearLayout attachmentsWrapper;
 
@@ -56,7 +55,6 @@ public class VideoPlayerController extends MediaPlayerUIController {
         noteRepository = DatabaseManager.getInstance(getContext()).getNoteRepository();
         attachments = getView().findViewById(R.id.attachments);
         textAttachment = getView().findViewById(R.id.textAttachment);
-        imageAttachment = getView().findViewById(R.id.imageAttachment);
         attachmentsWrapper = getView().findViewById(R.id.attachmentsWrapper);
 
         // Init recording list
@@ -162,18 +160,19 @@ public class VideoPlayerController extends MediaPlayerUIController {
             String text = FileUtils.readTextFile(fragment, nextNote.getFileName());
             textAttachment.setText(text);
             attachments.setVisibility(View.VISIBLE);
-            imageAttachment.setVisibility(View.GONE);
             textAttachment.setVisibility(View.VISIBLE);
             nextNote = null;
-        }else if(nextNote.getType().equals(Common.NOTE_TYPE.PICTURE.name())){
+        }
+        /*
+        else if(nextNote.getType().equals(Common.NOTE_TYPE.PICTURE.name())){
             //Toast.makeText(getContext(), "Update picture note!", Toast.LENGTH_SHORT).show();
             Bitmap pictureNote = FileUtils.readPictureFile(fragment, nextNote.getFileName());
             imageAttachment.setImageBitmap(pictureNote);
             attachments.setVisibility(View.VISIBLE);
-            imageAttachment.setVisibility(View.VISIBLE);
             textAttachment.setVisibility(View.GONE);
             nextNote = null;
         }
+        */
     }
     private void initRecordsList(){
         recordsList = getView().findViewById(R.id.videoPlayerRecordsContainer);

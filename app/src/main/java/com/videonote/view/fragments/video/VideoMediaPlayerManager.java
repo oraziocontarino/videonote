@@ -70,6 +70,9 @@ public class VideoMediaPlayerManager {
         this.fragment = fragment;
     }
     public void startVideoPlayer(RecordDTO record) throws Exception{
+        if (mediaPlayer != null) {
+            mediaPlayer.reset();
+        }
         mediaPlayer.setSurface(surfaceView);
         mediaPlayer.setDataSource(record.getFileName());
         mediaPlayer.prepare();

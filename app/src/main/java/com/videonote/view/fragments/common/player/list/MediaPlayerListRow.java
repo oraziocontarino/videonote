@@ -11,10 +11,7 @@ import com.videonote.database.dto.NoteDTO;
 import com.videonote.database.dto.RecordDTO;
 import com.videonote.database.repositories.NoteRepository;
 import com.videonote.utils.TimeUtils;
-import com.videonote.view.fragments.audio.AudioMediaPlayerManager;
-import com.videonote.view.fragments.audio.player.AudioPlayerController;
 import com.videonote.view.fragments.common.MediaPlayerUIController;
-import com.videonote.view.fragments.common.player.list.MediaPlayerListRowHeader;
 import com.videonote.view.fragments.common.player.list.detail.MediaPlayerListRowDetailButton;
 import com.videonote.view.fragments.common.player.list.detail.MediaPlayerListRowDetailDivider;
 import com.videonote.view.fragments.common.player.list.detail.MediaPlayerListRowDetailText;
@@ -28,10 +25,8 @@ public class MediaPlayerListRow extends LinearLayout {
     private List<LinearLayout> details;
     private NoteRepository noteRepository;
     private Context context;
-    private MediaPlayerUIController manager;
     public MediaPlayerListRow(MediaPlayerUIController manager, Context context, RecordDTO recordDTO){
         super(context);
-        this.manager = manager;
         this.context = context;
 
         layout = new LayoutParams(
@@ -59,7 +54,7 @@ public class MediaPlayerListRow extends LinearLayout {
 
     private void prepareDetail(RecordDTO recordDTO){
         List<NoteDTO> notes = noteRepository.getByRecordId(recordDTO.getId());
-        details = new ArrayList();
+        details = new ArrayList<>();
         for(NoteDTO note : notes){
             details.add(new MediaPlayerListRowDetailText(context, "Description", note.getFileName(), note));
             details.add(new MediaPlayerListRowDetailText(context, "Time", TimeUtils.getFormattedTime(note.getStartTime()), note));
