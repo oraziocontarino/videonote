@@ -19,6 +19,7 @@ import com.videonote.R;
 import com.videonote.view.fragments.HomeFragment;
 import com.videonote.view.fragments.audio.player.AudioPlayer;
 import com.videonote.view.fragments.audio.recorder.AudioRecorder;
+import com.videonote.view.fragments.common.CustomFragment;
 import com.videonote.view.fragments.video.player.VideoPlayer;
 import com.videonote.view.fragments.video.recorder.VideoRecorder;
 
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements
         VideoRecorder.OnFragmentInteractionListener,
         VideoPlayer.OnFragmentInteractionListener {
     private View navHeader;
+    private CustomFragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,30 +95,41 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        if(currentFragment != null){
+            switch(item.getItemId()){
+                case R.id.nav_home:
+                case R.id.nav_audio_player:
+                case R.id.nav_audio_recorder:
+                case R.id.nav_video_player:
+                case R.id.nav_video_recorder:
+                case R.id.nav_exit:
+                    currentFragment.clean();
+                    break;
+            }
+        }
 
-        Fragment fragment = null;
         switch(item.getItemId()){
             case R.id.nav_home:
-                fragment = HomeFragment.getInstance();
+                currentFragment = HomeFragment.getInstance();
                 break;
             case R.id.nav_audio_player:
-                fragment = AudioPlayer.getInstance();
+                currentFragment = AudioPlayer.getInstance();
                 break;
             case R.id.nav_audio_recorder:
-                fragment = AudioRecorder.getInstance();
+                currentFragment = AudioRecorder.getInstance();
                 break;
             case R.id.nav_video_player:
-                fragment = VideoPlayer.getInstance();
+                currentFragment = VideoPlayer.getInstance();
                 break;
             case R.id.nav_video_recorder:
-                fragment = VideoRecorder.getInstance();
+                currentFragment = VideoRecorder.getInstance();
                 break;
             case R.id.nav_exit:
                 System.exit(0);
                 break;
         }
-        if(fragment != null) {
-            displaySelectedFragment(fragment);
+        if(currentFragment != null) {
+            displaySelectedFragment(currentFragment);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

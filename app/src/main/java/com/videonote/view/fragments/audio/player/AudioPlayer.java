@@ -9,9 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.videonote.R;
+import com.videonote.view.fragments.common.CustomFragment;
 import com.videonote.view.fragments.video.player.VideoPlayer;
 
-public class AudioPlayer extends Fragment {
+public class AudioPlayer extends CustomFragment {
     private static AudioPlayer instance;
 
     public static AudioPlayer getInstance(){
@@ -64,10 +65,6 @@ public class AudioPlayer extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-        if(audioPlayerManager!=null) {
-            audioPlayerManager.clean();
-        }
     }
 
     public interface OnFragmentInteractionListener {
@@ -78,5 +75,12 @@ public class AudioPlayer extends Fragment {
     public void onStart(){
         super.onStart();
         audioPlayerManager = new AudioPlayerController(this);
+    }
+    @Override
+    public void clean() {
+        mListener = null;
+        if(audioPlayerManager!=null) {
+            audioPlayerManager.clean();
+        }
     }
 }

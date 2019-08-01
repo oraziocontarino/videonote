@@ -10,8 +10,9 @@ import android.view.ViewGroup;
 
 import com.videonote.R;
 import com.videonote.view.fragments.audio.player.AudioPlayer;
+import com.videonote.view.fragments.common.CustomFragment;
 
-public class AudioRecorder extends Fragment{
+public class AudioRecorder extends CustomFragment{
     private static AudioRecorder instance;
 
     public static AudioRecorder getInstance(){
@@ -62,8 +63,6 @@ public class AudioRecorder extends Fragment{
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-        audioRecorderController.clean();
     }
 
     public interface OnFragmentInteractionListener {
@@ -74,6 +73,12 @@ public class AudioRecorder extends Fragment{
     public void onStart(){
         super.onStart();
         audioRecorderController = new AudioRecorderController(this);
+    }
+
+    @Override
+    public void clean() {
+        mListener = null;
+        audioRecorderController.clean();
     }
 }
 

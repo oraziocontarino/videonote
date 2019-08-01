@@ -46,21 +46,31 @@ public class VideoPlayerController extends MediaPlayerUIController {
         this.currentRecordNotesList = null;
         this.currentRecordNotesStack = null;
         this.nextNote = null;
-
+        //videoPlayerControllerAsync = new VideoPlayerControllerAsync(this);
+        //videoPlayerControllerAsync.execute();
         // Init Database
         recordRepository = DatabaseManager.getInstance(getContext()).getRecordRepository();
         noteRepository = DatabaseManager.getInstance(getContext()).getNoteRepository();
 
+
+        fragment.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                init();
+            }
+        });
+        // Init recording list
+
+        updateButton(false,false,false,false);
+    }
+
+    private void init(){
         videoMediaPlayerManager = VideoMediaPlayerManager.getInstance(fragment);
         noteRepository = DatabaseManager.getInstance(getContext()).getNoteRepository();
         attachments = getView().findViewById(R.id.attachments);
         textAttachment = getView().findViewById(R.id.textAttachment);
         attachmentsWrapper = getView().findViewById(R.id.attachmentsWrapper);
-
-        // Init recording list
         initRecordsList();
-
-        updateButton(false,false,false,false);
     }
 
     @Override
@@ -134,12 +144,13 @@ public class VideoPlayerController extends MediaPlayerUIController {
             return;
         }
 
-        if(!videoMediaPlayerManager.isPlaying() && !videoMediaPlayerManager.isPaused() && videoMediaPlayerManager.isDirty()){
+        if(videoMediaPlayerManager.isFinished()){
             nextNote = null;
             textAttachment.setText("");
             attachments.setVisibility(View.GONE);
             textAttachment.setVisibility(View.GONE);
             videoMediaPlayerManager.resetVideoPlayer();
+            updateButton(false,false,false,false);
         }
 
         if(currentRecordNotesStack == null || (currentRecordNotesStack.size() == 0 && nextNote == null)){

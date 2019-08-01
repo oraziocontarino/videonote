@@ -134,12 +134,15 @@ public class MediaVideoManager {
         @Override
         public void onError(@NonNull CameraDevice cameraDevice, int error) {
             mCameraOpenCloseLock.release();
-            cameraDevice.close();
             mCameraDevice = null;
             Activity activity = getActivity();
             if (null != activity) {
                 activity.finish();
             }
+            /*
+            cameraDevice.close();
+
+            */
         }
 
     };
@@ -179,7 +182,6 @@ public class MediaVideoManager {
     }
 
     public void onResume() {
-        startBackgroundThread();
         if (!mTextureView.isAvailable()) {
             mTextureView = getView().findViewById(R.id.videoCameraPreviewTextureView);
             openCamera();
@@ -188,30 +190,6 @@ public class MediaVideoManager {
 
     public void onPause() {
         closeCamera();
-        stopBackgroundThread();
-    }
-
-    /**
-     * Starts a background thread and its {@link Handler}.
-     */
-    private void startBackgroundThread() {
-        mBackgroundThread = new HandlerThread("CameraBackground");
-        mBackgroundThread.start();
-        mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
-    }
-
-    /**
-     * Stops the background thread and its {@link Handler}.
-     */
-    private void stopBackgroundThread() {
-        mBackgroundThread.quitSafely();
-        try {
-            mBackgroundThread.join();
-            mBackgroundThread = null;
-            mBackgroundHandler = null;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
 

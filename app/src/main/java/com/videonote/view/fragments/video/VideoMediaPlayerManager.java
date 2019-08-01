@@ -10,6 +10,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.VideoView;
 
 import com.videonote.R;
 import com.videonote.database.dto.RecordDTO;
@@ -28,22 +29,41 @@ public class VideoMediaPlayerManager {
     private boolean paused;
     private TextureView textureView;
     private Surface surfaceView;
-
+    private boolean finished;
+    private RecordDTO record;
     private VideoMediaPlayerManager(Fragment fragment){
         this.fragment = fragment;
         mediaPlayer = new MediaPlayer();
         dirty = false;
+    }
+
+
+    public static VideoMediaPlayerManager getInstance(Fragment fragment){
+        if(instance == null){
+            instance = new VideoMediaPlayerManager(fragment);
+        }else{
+            instance.setFragment(fragment);
+        }
+        return instance;
+    }
+    private void setFragment(Fragment fragment){
+        this.fragment = fragment;
+    }
+    public void startVideoPlayer(RecordDTO record) throws Exception{
+        this.record = record;
         textureView = getView().findViewById(R.id.textureView);
+        if(textureView.isAvailable()){
+            initializeSurface(textureView.getSurfaceTexture());
+        }else{
+            initializeSurface();
+        }
+    }
+    private void initializeSurface(){
+        textureView.setVisibility(View.VISIBLE);
         textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
             @Override
             public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
-                try {
-                    //destoryIntroVideo();
-                    surfaceView = new Surface(surfaceTexture);
-                    //mediaPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
-                } catch (Exception e) {
-                    System.err.println("Error playing intro video: " + e.getMessage());
-                }
+                initializeSurface(surfaceTexture);
             }
 
             @Override
@@ -63,33 +83,30 @@ public class VideoMediaPlayerManager {
         });
     }
 
-
-    public static VideoMediaPlayerManager getInstance(Fragment fragment){
-        if(instance == null){
-            instance = new VideoMediaPlayerManager(fragment);
-        }else{
-            instance.setFragment(fragment);
+    private void initializeSurface(SurfaceTexture surfaceTexture){
+        textureView.setVisibility(View.VISIBLE);
+        try {
+            //destoryIntroVideo();
+            if (mediaPlayer != null) {
+                mediaPlayer.reset();
+            }
+            surfaceView = new Surface(surfaceTexture);
+            mediaPlayer.setSurface(surfaceView);
+            mediaPlayer.setDataSource(record.getFileName());
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                public void onCompletion(MediaPlayer mp) {
+                    finished=true;
+                }
+            });
+            dirty = true;
+            finished = false;
+            //mediaPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
+        } catch (Exception e) {
+            System.err.println("Error playing intro video: " + e.getMessage());
         }
-        return instance;
     }
-    private void setFragment(Fragment fragment){
-        this.fragment = fragment;
-    }
-    public void startVideoPlayer(RecordDTO record) throws Exception{
-        if (mediaPlayer != null) {
-            mediaPlayer.reset();
-        }
-        if(!textureView.isAvailable()){
-            textureView = getView().findViewById(R.id.textureView);
-            surfaceView = new Surface(textureView.getSurfaceTexture());
-        }
-        mediaPlayer.setSurface(surfaceView);
-        mediaPlayer.setDataSource(record.getFileName());
-        mediaPlayer.prepare();
-        mediaPlayer.start();
-        dirty = true;
-    }
-
     public void pauseVideoPlayer(){
         mediaPlayer.pause();
         paused = true;
@@ -105,11 +122,15 @@ public class VideoMediaPlayerManager {
         mediaPlayer.reset();   // You can reuse the object by going back to setVideoSource() step
         dirty = false;
         paused = false;
+        textureView.setVisibility(View.GONE);
     }
     public void resetVideoPlayer(){
         mediaPlayer.reset();   // You can reuse the object by going back to setVideoSource() step
         dirty = false;
         paused = false;
+    }
+    public boolean isFinished(){
+        return finished;
     }
     public boolean isDirty(){
         return dirty;

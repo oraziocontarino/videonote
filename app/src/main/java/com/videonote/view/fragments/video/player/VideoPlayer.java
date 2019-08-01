@@ -3,27 +3,27 @@ package com.videonote.view.fragments.video.player;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.videonote.R;
+import com.videonote.view.fragments.common.CustomFragment;
 import com.videonote.view.fragments.video.recorder.VideoRecorder;
 import com.videonote.view.fragments.video.recorder.VideoRecorderController;
 
-public class VideoPlayer extends Fragment {
+public class VideoPlayer extends CustomFragment {
     private static VideoPlayer instance;
-
+    private VideoPlayerController videoPlayerController;
     public static VideoPlayer getInstance(){
         if(instance == null){
             instance = new VideoPlayer();
         }
         return instance;
     }
-
-    // Header UI - common to Recorder
-    private VideoPlayerController videoPlayerController;
 
     private OnFragmentInteractionListener mListener;
 
@@ -64,10 +64,6 @@ public class VideoPlayer extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-        if(videoPlayerController !=null) {
-            videoPlayerController.clean();
-        }
     }
 
     public interface OnFragmentInteractionListener {
@@ -78,5 +74,12 @@ public class VideoPlayer extends Fragment {
     public void onStart(){
         super.onStart();
         videoPlayerController = new VideoPlayerController(this);
+    }
+    @Override
+    public void clean() {
+        mListener = null;
+        if(videoPlayerController !=null) {
+            videoPlayerController.clean();
+        }
     }
 }

@@ -26,7 +26,16 @@ public class VideoRecorderController extends MediaRecorderUIController {
                 R.id.videoRecordStartButton,
                 R.id.videoRecordStopButton
         );
+        fragment.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                initAsync();
+            }
+        });
         // Init Database
+
+    }
+    private void initAsync(){
         recordRepository = DatabaseManager.getInstance(getContext()).getRecordRepository();
 
         videoMediaRecorderManager = VideoMediaRecorderManager.getInstance(fragment);
