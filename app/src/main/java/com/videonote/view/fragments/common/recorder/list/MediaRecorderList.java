@@ -1,7 +1,6 @@
 package com.videonote.view.fragments.common.recorder.list;
 
 import android.content.Context;
-import android.media.MediaRecorder;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -11,13 +10,12 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.videonote.Common;
+import com.videonote.view.Common;
 import com.videonote.database.DatabaseManager;
 import com.videonote.database.dto.NoteDTO;
 import com.videonote.database.repositories.NoteRepository;
 import com.videonote.database.dto.RecordDTO;
 import com.videonote.utils.FileUtils;
-import com.videonote.view.fragments.audio.AudioMediaRecorderManager;
 import com.videonote.view.fragments.common.MediaRecorderManager;
 
 public abstract class MediaRecorderList {

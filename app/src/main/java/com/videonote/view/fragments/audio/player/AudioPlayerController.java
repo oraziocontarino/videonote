@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.videonote.Common;
+import com.videonote.view.Common;
 import com.videonote.R;
 import com.videonote.database.DatabaseManager;
 import com.videonote.database.dto.NoteDTO;

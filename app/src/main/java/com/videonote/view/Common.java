@@ -1,14 +1,16 @@
-package com.videonote;
+package com.videonote.view;
 
 public class Common {
     public static final String EOL = "\r\n";
-    public static enum RECORD_TYPE {
+    public enum RECORD_TYPE {
         AUDIO,
         VIDEO
     }
-    public static enum NOTE_TYPE {
+    public enum NOTE_TYPE {
         TEXT,
         PICTURE
     }
+
+
 
 }

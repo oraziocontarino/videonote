@@ -2,7 +2,6 @@ package com.videonote.view;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -14,9 +13,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.videonote.R;
 import com.videonote.view.fragments.HomeFragment;
+import com.videonote.view.fragments.NoPermissionsFragment;
 import com.videonote.view.fragments.audio.player.AudioPlayer;
 import com.videonote.view.fragments.audio.recorder.AudioRecorder;
 import com.videonote.view.fragments.common.CustomFragment;
@@ -28,7 +29,8 @@ public class MainActivity extends AppCompatActivity implements
         AudioRecorder.OnFragmentInteractionListener,
         AudioPlayer.OnFragmentInteractionListener,
         VideoRecorder.OnFragmentInteractionListener,
-        VideoPlayer.OnFragmentInteractionListener {
+        VideoPlayer.OnFragmentInteractionListener,
+        NoPermissionsFragment.OnFragmentInteractionListener {
     private View navHeader;
     private CustomFragment currentFragment;
 
@@ -54,9 +56,6 @@ public class MainActivity extends AppCompatActivity implements
 
         //Select Home by default
         navigationView.setCheckedItem(R.id.nav_home);
-        Fragment fragment = new HomeFragment();
-        displaySelectedFragment(fragment);
-
     }
 
     @Override
@@ -129,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements
                 break;
         }
         if(currentFragment != null) {
-            displaySelectedFragment(currentFragment);
+            PermissionsManager.checkAll(this);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -152,4 +151,16 @@ public class MainActivity extends AppCompatActivity implements
         //you can leave it empty
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        if(!PermissionsManager.checkSuccess(requestCode, permissions, grantResults)){
+            displaySelectedFragment(NoPermissionsFragment.getInstance());
+            return;
+        }
+        if(currentFragment == null){
+            return;
+        }
+        displaySelectedFragment(currentFragment);
+    }
 }

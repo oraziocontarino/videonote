@@ -1,15 +1,13 @@
 package com.videonote.view.fragments.video.player;
 
-import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.videonote.Common;
+import com.videonote.view.Common;
 import com.videonote.R;
 import com.videonote.database.DatabaseManager;
 import com.videonote.database.dto.NoteDTO;

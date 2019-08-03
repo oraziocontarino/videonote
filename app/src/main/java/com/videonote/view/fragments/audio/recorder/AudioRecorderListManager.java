@@ -6,7 +6,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-import com.videonote.Common;
+import com.videonote.view.Common;
 import com.videonote.R;
 import com.videonote.utils.FileUtils;
 import com.videonote.utils.MediaPhotoManager;

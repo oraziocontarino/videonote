@@ -4,7 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.videonote.Common;
+import com.videonote.view.Common;
 import com.videonote.database.dto.RecordDTO;
 import com.videonote.database.TableColumn;
 

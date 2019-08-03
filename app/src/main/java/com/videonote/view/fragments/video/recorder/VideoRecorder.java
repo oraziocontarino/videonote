@@ -78,6 +78,8 @@ public class VideoRecorder extends CustomFragment {
     @Override
     public void clean() {
         mListener = null;
-        videoRecorderController.clean();
+        if(videoRecorderController != null) {
+            videoRecorderController.clean();
+        }
     }
 }

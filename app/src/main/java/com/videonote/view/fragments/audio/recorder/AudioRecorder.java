@@ -78,7 +78,9 @@ public class AudioRecorder extends CustomFragment{
     @Override
     public void clean() {
         mListener = null;
-        audioRecorderController.clean();
+        if(audioRecorderController != null) {
+            audioRecorderController.clean();
+        }
     }
 }
 

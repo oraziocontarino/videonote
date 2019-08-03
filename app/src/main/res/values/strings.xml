@@ -21,4 +21,6 @@
     <string name="audio_player_delete">Delete</string>
     <string name="audio_player_show_note_list">+</string>
     <string name="audio_player_hide_note_list">-</string>
+    <string name="permissions_allow">Allow text</string>
+    <string name="permissions_deny">Deny text</string>
 </resources>
