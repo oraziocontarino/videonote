@@ -18,6 +18,10 @@ public class RecordRepository extends Repository<RecordDTO>{
 
     private static final TableColumn TYPE = new TableColumn("recordId", "TEXT");
 
+    private static final TableColumn LATITUDE = new TableColumn("latitude", "REAL");
+    private static final TableColumn LONGITUDE = new TableColumn("longitude", "REAL");
+    private static final TableColumn LOCALITY = new TableColumn("locality", "TEXT");
+
 
     public RecordRepository(SQLiteOpenHelper _this) {
         super(_this, "records_table");
@@ -27,7 +31,7 @@ public class RecordRepository extends Repository<RecordDTO>{
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(
-                generateCreateTableSql(ID, FILE_NAME, TYPE)
+                generateCreateTableSql(ID, FILE_NAME, TYPE, LATITUDE, LONGITUDE, LOCALITY)
         );
     }
 
@@ -42,6 +46,9 @@ public class RecordRepository extends Repository<RecordDTO>{
         ContentValues cv = new ContentValues();
         cv.put(FILE_NAME.getName(), record.getFileName());
         cv.put(TYPE.getName(), record.getType());
+        cv.put(LATITUDE.getName(), record.getLatitude());
+        cv.put(LONGITUDE.getName(), record.getLongitude());
+        cv.put(LOCALITY.getName(), record.getLocality());
         long id = db.insert(TABLE_NAME,null, cv);
         record.setId(id);
         db.close();
@@ -53,12 +60,15 @@ public class RecordRepository extends Repository<RecordDTO>{
         ContentValues cv = new ContentValues();
         cv.put(FILE_NAME.getName(), record.getFileName());
         cv.put(TYPE.getName(), record.getType());
+        cv.put(LATITUDE.getName(), record.getLatitude());
+        cv.put(LONGITUDE.getName(), record.getLongitude());
+        cv.put(LOCALITY.getName(), record.getLocality());
 
         // updating row
         return db.update(TABLE_NAME, cv, ID.getName() + " = ?",
                 new String[]{String.valueOf(record.getId())});
     }
-
+/*
     public RecordDTO getById(long id) {
         // get readable database as we are not inserting anything
         SQLiteDatabase db = _this.getReadableDatabase();
@@ -71,24 +81,29 @@ public class RecordRepository extends Repository<RecordDTO>{
         if (cursor != null)
             cursor.moveToFirst();
 
-        // prepare note object
-        RecordDTO data = new RecordDTO(
-                cursor.getInt(cursor.getColumnIndex(ID.getName())),
-                cursor.getString(cursor.getColumnIndex(FILE_NAME.getName())),
-                cursor.getString(cursor.getColumnIndex(TYPE.getName())));
+        // prepare record object
+        RecordDTO data = DatabaseUtils.recordCursorToDTO(cursor);
 
         // close the db connection
         cursor.close();
 
         return data;
     }
+    */
 
     public List<RecordDTO> getByType(Common.RECORD_TYPE type) {
         SQLiteDatabase db = _this.getWritableDatabase();
         List<RecordDTO> records = new ArrayList<>();
 
         Cursor cursor = db.query(TABLE_NAME,
-                new String[]{ID.getName(), FILE_NAME.getName(), TYPE.getName()},
+                new String[]{
+                        ID.getName(),
+                        FILE_NAME.getName(),
+                        TYPE.getName(),
+                        LATITUDE.getName(),
+                        LONGITUDE.getName(),
+                        LOCALITY.getName()
+                },
                 TYPE.getName() + "=?",
                 new String[]{type.name()}, null, null, ID.getName()+" DESC ", null);
 
@@ -96,28 +111,64 @@ public class RecordRepository extends Repository<RecordDTO>{
             return records;
 
         do {
-            RecordDTO record = new RecordDTO();
-            record.setId(cursor.getInt(cursor.getColumnIndex(ID.getName())));
-            record.setFileName(cursor.getString(cursor.getColumnIndex(FILE_NAME.getName())));
-            record.setType(cursor.getString(cursor.getColumnIndex(TYPE.getName())));
-            records.add(record);
+            records.add(
+                    new RecordDTO(
+                            cursor.getInt(cursor.getColumnIndex(ID.getName())),
+                            cursor.getString(cursor.getColumnIndex(FILE_NAME.getName())),
+                            cursor.getString(cursor.getColumnIndex(TYPE.getName())),
+                            cursor.getDouble(cursor.getColumnIndex(LATITUDE.getName())),
+                            cursor.getDouble(cursor.getColumnIndex(LONGITUDE.getName())),
+                            cursor.getString(cursor.getColumnIndex(LOCALITY.getName()))
+                    )
+            );
         } while (cursor.moveToNext());
-
+        if(!cursor.isClosed()){
+            cursor.close();
+        }
         return records;
     }
 
-/*
-    public int getDataCount() {
-        String countQuery = "SELECT  * FROM " + TABLE_NAME;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(countQuery, null);
+    public List<RecordDTO> getAll() {
+        SQLiteDatabase db = _this.getWritableDatabase();
+        List<RecordDTO> records = new ArrayList<>();
 
-        int count = cursor.getCount();
-        cursor.close();
-        // return count
-        return count;
+        Cursor cursor = db.query(TABLE_NAME,
+                new String[]{
+                        ID.getName(),
+                        FILE_NAME.getName(),
+                        TYPE.getName(),
+                        LATITUDE.getName(),
+                        LONGITUDE.getName(),
+                        LOCALITY.getName()
+                },
+                null,
+                null,
+                null,
+                null,
+                ID.getName()+" DESC ",
+                null);
+
+        if (cursor == null || cursor.moveToFirst() == false)
+            return records;
+
+        do {
+            records.add(
+                    new RecordDTO(
+                            cursor.getInt(cursor.getColumnIndex(ID.getName())),
+                            cursor.getString(cursor.getColumnIndex(FILE_NAME.getName())),
+                            cursor.getString(cursor.getColumnIndex(TYPE.getName())),
+                            cursor.getDouble(cursor.getColumnIndex(LATITUDE.getName())),
+                            cursor.getDouble(cursor.getColumnIndex(LONGITUDE.getName())),
+                            cursor.getString(cursor.getColumnIndex(LOCALITY.getName()))
+                    )
+            );
+        } while (cursor.moveToNext());
+        if(!cursor.isClosed()){
+            cursor.close();
+        }
+        return records;
     }
-*/
+
     public void delete(RecordDTO record) {
         SQLiteDatabase db = _this.getWritableDatabase();
         db.delete(TABLE_NAME, ID.getName() + " = ?",

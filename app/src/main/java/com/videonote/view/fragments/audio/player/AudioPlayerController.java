@@ -20,6 +20,7 @@ import com.videonote.utils.FileUtils;
 import com.videonote.view.fragments.audio.AudioMediaPlayerManager;
 import com.videonote.view.fragments.common.MediaPlayerUIController;
 import com.videonote.view.fragments.common.player.list.MediaPlayerListRow;
+import com.videonote.view.fragments.dashboard.CustomLocationManager;
 
 import java.util.List;
 import java.util.Stack;
@@ -38,7 +39,6 @@ public class AudioPlayerController extends MediaPlayerUIController {
     private ImageView imageAttachment;
     private ScrollView attachments;
     private LinearLayout attachmentsWrapper;
-
 
     public AudioPlayerController(Fragment fragment){
         super(fragment, R.id.audioPlayerStatusLabel, R.id.audioPlayerStatusValue, R.id.audioPlayerStartButton, R.id.audioPlayerStopButton, R.id.audioPlayerPauseButton, R.id.audioPlayerResumeButton);

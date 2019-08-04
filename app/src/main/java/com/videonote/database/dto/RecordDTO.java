@@ -4,19 +4,21 @@ public class RecordDTO {
     private long id;
     private String fileName;
     private String type;
+    private double latitude;
+    private double longitude;
+    private String locality;
 
     public RecordDTO(){
 
     }
-    public RecordDTO(String fileName, String type){
-        this.fileName = fileName;
-        this.type = type;
-    }
 
-    public RecordDTO(long id, String fileName, String type){
+    public RecordDTO(long id, String fileName, String type, double latitude, double longitude, String locality){
         this.id = id;
         this.fileName = fileName;
         this.type = type;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.locality = locality;
     }
 
     public long getId() {
@@ -48,5 +50,29 @@ public class RecordDTO {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLocality() {
+        return locality;
+    }
+
+    public void setLocality(String locality) {
+        this.locality = locality;
     }
 }

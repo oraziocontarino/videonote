@@ -1,6 +1,7 @@
 package com.videonote.view.fragments.common.recorder.list;
 
 import android.content.Context;
+import android.location.Location;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -17,6 +18,7 @@ import com.videonote.database.repositories.NoteRepository;
 import com.videonote.database.dto.RecordDTO;
 import com.videonote.utils.FileUtils;
 import com.videonote.view.fragments.common.MediaRecorderManager;
+import com.videonote.view.fragments.dashboard.CustomLocationManager;
 
 public abstract class MediaRecorderList {
     protected Fragment fragment;
@@ -28,15 +30,19 @@ public abstract class MediaRecorderList {
     protected NoteRepository noteRepository;
     protected String noteSuffix;
     protected MediaRecorderManager mediaRecorderManager;
+    protected CustomLocationManager locationManager;
 
     public MediaRecorderList(Fragment fragment, MediaRecorderManager mediaRecorderManager, int recordNoteContainerId, int recordTextButtonId, int recordTextInputId){
+        this.fragment = fragment;
+        // Location
+        locationManager = CustomLocationManager.getInstance(getContext());
+
         noteList = fragment.getView().findViewById(recordNoteContainerId);
         addTextNoteButton = fragment.getView().findViewById(recordTextButtonId);
         noteText = fragment.getView().findViewById(recordTextInputId);
         noteDTO = new NoteDTO();
         recordDTO = new RecordDTO();
         noteRepository = DatabaseManager.getInstance(fragment.getContext()).getNoteRepository();
-        this.fragment = fragment;
         this.mediaRecorderManager = mediaRecorderManager;
 
         addTextNoteButton.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +131,8 @@ public abstract class MediaRecorderList {
     public void updateRecordDTO(String fileName, Common.RECORD_TYPE type){
         this.recordDTO.setFileName(fileName);
         this.recordDTO.setType(type.name());
+        updateRecordCoords();
+
     }
     public void updateRecordDTO(long id){
         this.recordDTO.setId(id);
@@ -145,5 +153,13 @@ public abstract class MediaRecorderList {
 
     protected Context getContext(){
         return fragment.getContext();
+    }
+
+    private void updateRecordCoords(){
+        Location location = locationManager.getLocation();
+        this.recordDTO.setLatitude(location.getLatitude());
+        this.recordDTO.setLongitude(location.getLongitude());
+        this.recordDTO.setLocality(locationManager.geodecodeLocation(getContext(), location));
+
     }
 }

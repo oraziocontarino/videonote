@@ -21,6 +21,7 @@ import com.videonote.view.fragments.NoPermissionsFragment;
 import com.videonote.view.fragments.audio.player.AudioPlayer;
 import com.videonote.view.fragments.audio.recorder.AudioRecorder;
 import com.videonote.view.fragments.common.CustomFragment;
+import com.videonote.view.fragments.dashboard.DashboardFragment;
 import com.videonote.view.fragments.video.player.VideoPlayer;
 import com.videonote.view.fragments.video.recorder.VideoRecorder;
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements
         NoPermissionsFragment.OnFragmentInteractionListener {
     private View navHeader;
     private CustomFragment currentFragment;
+    private boolean loadFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements
 
         //Select Home by default
         navigationView.setCheckedItem(R.id.nav_home);
+        loadFragment = false;
+        displaySelectedFragment(HomeFragment.getInstance());
     }
 
     @Override
@@ -93,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        loadFragment = true;
         // Handle navigation view item clicks here.
         if(currentFragment != null){
             switch(item.getItemId()){
@@ -109,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements
 
         switch(item.getItemId()){
             case R.id.nav_home:
-                currentFragment = HomeFragment.getInstance();
+                currentFragment = DashboardFragment.getInstance();
                 break;
             case R.id.nav_audio_player:
                 currentFragment = AudioPlayer.getInstance();
@@ -141,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements
      * @param fragment
      */
     private void displaySelectedFragment(Fragment fragment) {
+        loadFragment = false;
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame, fragment);
         fragmentTransaction.commit();
@@ -161,6 +167,8 @@ public class MainActivity extends AppCompatActivity implements
         if(currentFragment == null){
             return;
         }
-        displaySelectedFragment(currentFragment);
+        if(loadFragment) {
+            displaySelectedFragment(currentFragment);
+        }
     }
 }

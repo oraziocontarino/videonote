@@ -44,12 +44,6 @@ public class VideoPlayerController extends MediaPlayerUIController {
         this.currentRecordNotesList = null;
         this.currentRecordNotesStack = null;
         this.nextNote = null;
-        //videoPlayerControllerAsync = new VideoPlayerControllerAsync(this);
-        //videoPlayerControllerAsync.execute();
-        // Init Database
-        recordRepository = DatabaseManager.getInstance(getContext()).getRecordRepository();
-        noteRepository = DatabaseManager.getInstance(getContext()).getNoteRepository();
-
 
         fragment.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -63,6 +57,10 @@ public class VideoPlayerController extends MediaPlayerUIController {
     }
 
     private void init(){
+        // Init Database
+        recordRepository = DatabaseManager.getInstance(getContext()).getRecordRepository();
+        noteRepository = DatabaseManager.getInstance(getContext()).getNoteRepository();
+
         videoMediaPlayerManager = VideoMediaPlayerManager.getInstance(fragment);
         noteRepository = DatabaseManager.getInstance(getContext()).getNoteRepository();
         attachments = getView().findViewById(R.id.attachments);
@@ -170,23 +168,13 @@ public class VideoPlayerController extends MediaPlayerUIController {
             textAttachment.setVisibility(View.VISIBLE);
             nextNote = null;
         }
-        /*
-        else if(nextNote.getType().equals(Common.NOTE_TYPE.PICTURE.name())){
-            //Toast.makeText(getContext(), "Update picture note!", Toast.LENGTH_SHORT).show();
-            Bitmap pictureNote = FileUtils.readPictureFile(fragment, nextNote.getFileName());
-            imageAttachment.setImageBitmap(pictureNote);
-            attachments.setVisibility(View.VISIBLE);
-            textAttachment.setVisibility(View.GONE);
-            nextNote = null;
-        }
-        */
     }
     private void initRecordsList(){
         recordsList = getView().findViewById(R.id.videoPlayerRecordsContainer);
         recordsList.removeAllViews();
         List<RecordDTO> records = recordRepository.getByType(Common.RECORD_TYPE.VIDEO);
         for(final RecordDTO record : records){
-            recordsList.addView(new MediaPlayerListRow(this, getContext(), record));
+            recordsList.addView(new VideoPlayerListRow(this, getContext(), record));
         }
     }
 

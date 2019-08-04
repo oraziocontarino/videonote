@@ -12,6 +12,7 @@ import com.videonote.utils.TimeUtils;
 import com.videonote.view.fragments.audio.AudioMediaRecorderManager;
 import com.videonote.utils.FileUtils;
 import com.videonote.view.fragments.common.MediaRecorderUIController;
+import com.videonote.view.fragments.dashboard.CustomLocationManager;
 
 public class AudioRecorderController extends MediaRecorderUIController {
     private AudioMediaRecorderManager audioMediaRecorderManager;

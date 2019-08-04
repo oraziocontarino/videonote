@@ -37,7 +37,7 @@ public class MediaPlayerListRowHeader extends LinearLayout {
     private RecordDTO record;
 
     public MediaPlayerListRowHeader(MediaPlayerListRow row, MediaPlayerUIController manager, RecordDTO record){
-        super(manager.getContext());
+        super(row.getContext());
         this.record = record;
         this.manager = manager;
         this.row = row;
@@ -50,53 +50,55 @@ public class MediaPlayerListRowHeader extends LinearLayout {
         super.setOrientation(LinearLayout.HORIZONTAL);
 
         title = generateTitleColumn(record.getFileName(true));
-        playButton = generateButtonColumn(R.drawable.ic_baseline_play_arrow_24px);
-        deleteButton = generateButtonColumn(R.drawable.ic_baseline_delete_forever_24px);
+        super.addView(title);
+
+        if(manager != null){
+            playButton = generateButtonColumn(R.drawable.ic_baseline_play_arrow_24px);
+            deleteButton = generateButtonColumn(R.drawable.ic_baseline_delete_forever_24px);
+            super.addView(playButton);
+            super.addView(deleteButton);
+        }
+
         moreButton = generateButtonColumn(R.drawable.ic_baseline_unfold_more_24px);
         lessButton = generateButtonColumn(R.drawable.ic_baseline_unfold_less_24px);
-
         lessButton.setVisibility(View.GONE);
-
-
-        initPlayerButtons();
-
-        super.addView(title);
-        super.addView(playButton);
-        super.addView(deleteButton);
         super.addView(moreButton);
         super.addView(lessButton);
+        initPlayerButtons();
+
         recordRepository = DatabaseManager.getInstance(getContext()).getRecordRepository();
         noteRepository = DatabaseManager.getInstance(getContext()).getNoteRepository();
     }
 
     private void initPlayerButtons(){
-        playButton.setOnClickListener(new View.OnClickListener() {
+        if(manager != null){
+            playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    toastPlay();
-                    manager.startAction(record);
-                }catch(Exception e){
-                    Log.d("AUDIO", "ERROR");
+                    try {
+                        toastPlay();
+                        manager.startAction(record);
+                    }catch(Exception e){
+                        Log.d("AUDIO", "ERROR");
+                    }
                 }
-            }
-        });
+            });
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    manager.stopAction();
-                    deleteNotes();
-                    deleteRecord();
-                    toastDelete();
-                    manager.removeRow(row);
-                }catch(Exception e){
-                    Log.d("AUDIO", "ERROR");
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        manager.stopAction();
+                        deleteNotes();
+                        deleteRecord();
+                        toastDelete();
+                        manager.removeRow(row);
+                    }catch(Exception e){
+                        Log.d("AUDIO", "ERROR");
+                    }
                 }
-            }
-        });
-
+            });
+        }
         moreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
