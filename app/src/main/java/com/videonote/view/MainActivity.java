@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
         //Select Home by default
-        navigationView.setCheckedItem(R.id.nav_home);
+        //navigationView.setCheckedItem(R.id.nav_home);
         loadFragment = false;
         displaySelectedFragment(HomeFragment.getInstance());
     }

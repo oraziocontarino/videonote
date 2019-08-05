@@ -16,6 +16,7 @@ import com.videonote.database.dto.RecordDTO;
 import com.videonote.database.repositories.NoteRepository;
 import com.videonote.database.repositories.RecordRepository;
 import com.videonote.utils.FileUtils;
+import com.videonote.view.MainActivity;
 import com.videonote.view.fragments.audio.player.AudioPlayerController;
 import com.videonote.view.fragments.common.MediaPlayerUIController;
 
@@ -79,7 +80,7 @@ public class MediaPlayerListRowHeader extends LinearLayout {
                         toastPlay();
                         manager.startAction(record);
                     }catch(Exception e){
-                        Log.d("AUDIO", "ERROR");
+                        Log.d("MEDIA", "ERROR");
                     }
                 }
             });
@@ -94,7 +95,7 @@ public class MediaPlayerListRowHeader extends LinearLayout {
                         toastDelete();
                         manager.removeRow(row);
                     }catch(Exception e){
-                        Log.d("AUDIO", "ERROR");
+                        Log.d("MEDIA", "ERROR");
                     }
                 }
             });

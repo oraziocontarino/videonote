@@ -22,6 +22,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.videonote.R;
 import com.videonote.database.DatabaseManager;
@@ -34,16 +35,20 @@ import com.videonote.view.fragments.video.player.VideoPlayerListRow;
 
 import java.io.IOException;
 import java.security.Security;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class MapManger {
     private Fragment fragment;
     private RecordRepository recordRepository;
     private LinearLayout recordsList;
+    private Map<Marker, RecordDTO> markerList;
 
     public MapManger(Fragment fragment){
         this.fragment = fragment;
+        this.markerList = new HashMap<>();
         fragment.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -53,16 +58,10 @@ public class MapManger {
     }
 
     private void init(){
-        initData();
-        initMap();
-    }
-
-
-
-    private void initData(){
         // Init Database
         recordRepository = DatabaseManager.getInstance(getContext()).getRecordRepository();
-        initRecordsList();
+        recordsList = getView().findViewById(R.id.dashboardRecordsContainer);
+        initMap();
     }
 
     private void initMap(){
@@ -74,8 +73,19 @@ public class MapManger {
 
                 mMap.clear(); //clear old markers
 
+                List<RecordDTO> records = recordRepository.getAll();
+                double avgLat = 0;
+                double avgLng = 0;
+                for(RecordDTO record : records){
+                    avgLat += record.getLatitude();
+                    avgLng += record.getLongitude();
+                    addMarker(mMap, record);
+                }
+                avgLat /= records.size();
+                avgLng /= records.size();
+
                 CameraPosition googlePlex = CameraPosition.builder()
-                        .target(new LatLng(37.4219999,-122.0862462))
+                        .target(new LatLng(avgLat, avgLng))
                         .zoom(10)
                         .bearing(0)
                         .tilt(45)
@@ -83,31 +93,39 @@ public class MapManger {
 
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 10000, null);
 
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        getView().findViewById(R.id.dashboardText).setVisibility(View.GONE);
+                        RecordDTO record = markerList.get(marker);
+                        recordsList.removeAllViews();
+                        recordsList.addView(new DashboardPlayerListRow(getContext(), record));
+                        return true;
+                    }
+                });
+                /*
                 addMarker(mMap, "SpiderMan", 37.4219999, -122.0862462);
                 addMarker(mMap, "IronMan", 37.4629101, -122.2449094);
                 addMarker(mMap, "CaptainAmerica", 37.3092293, -122.1136845);
+                */
             }
         });
     }
 
 
-    private void addMarker(GoogleMap mMap, String label, double lat, double lng){
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(lat,lng))
-                .title(label));
+    private void addMarker(GoogleMap mMap, RecordDTO record){
+        markerList.put(
+            mMap.addMarker(
+                    new MarkerOptions().position(
+                            new LatLng(
+                                    record.getLatitude(),
+                                    record.getLongitude()
+                            )
+                    ).title(record.getFileName(true))
+            ),
+            record
+        );
     }
-
-    private void initRecordsList(){
-        recordsList = getView().findViewById(R.id.dashboardRecordsContainer);
-        recordsList.removeAllViews();
-        List<RecordDTO> records = recordRepository.getAll();
-        for(final RecordDTO record : records){
-            recordsList.addView(new DashboardPlayerListRow(getContext(), record));
-        }
-    }
-
-
-
 
     private View getView(){
         return fragment.getView();

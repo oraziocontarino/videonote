@@ -42,7 +42,7 @@ public class DashboardFragment extends CustomFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(NavigationDrawerConstants.TAG_HOME);
+        getActivity().setTitle(NavigationDrawerConstants.TAG_DASHBOARD);
     }
 
     @Override

@@ -25,10 +25,11 @@ public class MediaPlayerListRow extends LinearLayout {
     private List<LinearLayout> details;
     private NoteRepository noteRepository;
     private Context context;
+    private MediaPlayerUIController manager;
     public MediaPlayerListRow(MediaPlayerUIController manager, Context context, RecordDTO recordDTO){
         super(context);
         this.context = context;
-
+        this.manager = manager;
         layout = new LayoutParams(
                 LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT
@@ -37,12 +38,12 @@ public class MediaPlayerListRow extends LinearLayout {
         super.setOrientation(LinearLayout.VERTICAL);
         noteRepository = DatabaseManager.getInstance(getContext()).getNoteRepository();
 
-        prepareHeader(manager, recordDTO);
+        prepareHeader(recordDTO);
         prepareDetail(recordDTO);
         setRow();
     }
 
-    private void prepareHeader(MediaPlayerUIController manager, RecordDTO recordDTO){
+    private void prepareHeader(RecordDTO recordDTO){
         header = new MediaPlayerListRowHeader(this, manager, recordDTO);
     }
     private void setRow(){
@@ -58,13 +59,14 @@ public class MediaPlayerListRow extends LinearLayout {
         for(NoteDTO note : notes){
             details.add(new MediaPlayerListRowDetailText(context, "Description", note.getFileName(), note));
             details.add(new MediaPlayerListRowDetailText(context, "Time", TimeUtils.getFormattedTime(note.getStartTime()), note));
-
-            details.add(new MediaPlayerListRowDetailButton(context, "Delete", R.drawable.ic_baseline_delete_forever_24px, note, new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(getContext(), "Delete note evt!", Toast.LENGTH_SHORT).show();
-                }
-            }));
+            if(manager != null){
+                details.add(new MediaPlayerListRowDetailButton(context, "Delete", R.drawable.ic_baseline_delete_forever_24px, note, new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(getContext(), "Delete note evt!", Toast.LENGTH_SHORT).show();
+                    }
+                }));
+            }
             details.add(new MediaPlayerListRowDetailDivider(context));
         }
     }

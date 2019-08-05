@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.videonote.NavigationDrawerConstants;
 import com.videonote.R;
 import com.videonote.view.fragments.common.CustomFragment;
 import com.videonote.view.fragments.video.player.VideoPlayer;
@@ -41,6 +42,7 @@ public class AudioPlayer extends CustomFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().setTitle(NavigationDrawerConstants.TAG_AUDIO_PLAYER);
     }
 
     @Override

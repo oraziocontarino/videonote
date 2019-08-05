@@ -38,7 +38,7 @@ public class NoPermissionsFragment extends CustomFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(NavigationDrawerConstants.TAG_HOME);
+        getActivity().setTitle(NavigationDrawerConstants.TAG_NO_PERMISSIONS);
     }
 
     @Override

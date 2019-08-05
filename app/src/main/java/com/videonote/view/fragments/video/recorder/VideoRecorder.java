@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.videonote.NavigationDrawerConstants;
 import com.videonote.R;
 import com.videonote.view.fragments.HomeFragment;
 import com.videonote.view.fragments.common.CustomFragment;
@@ -39,6 +40,7 @@ public class VideoRecorder extends CustomFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().setTitle(NavigationDrawerConstants.TAG_VIDEO_RECORDER);
     }
 
     @Override

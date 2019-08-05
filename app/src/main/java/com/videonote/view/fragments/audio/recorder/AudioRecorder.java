@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.videonote.NavigationDrawerConstants;
 import com.videonote.R;
 import com.videonote.view.fragments.audio.player.AudioPlayer;
 import com.videonote.view.fragments.common.CustomFragment;
@@ -40,6 +41,7 @@ public class AudioRecorder extends CustomFragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().setTitle(NavigationDrawerConstants.TAG_AUDIO_RECORDER);
     }
 
     @Override
