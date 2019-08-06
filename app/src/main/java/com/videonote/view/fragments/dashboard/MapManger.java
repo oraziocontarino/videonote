@@ -97,17 +97,11 @@ public class MapManger {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
                         getView().findViewById(R.id.dashboardText).setVisibility(View.GONE);
-                        RecordDTO record = markerList.get(marker);
                         recordsList.removeAllViews();
-                        recordsList.addView(new DashboardPlayerListRow(getContext(), record));
+                        recordsList.addView(new DashboardPlayerListRow(getContext(), markerList.get(marker)));
                         return true;
                     }
                 });
-                /*
-                addMarker(mMap, "SpiderMan", 37.4219999, -122.0862462);
-                addMarker(mMap, "IronMan", 37.4629101, -122.2449094);
-                addMarker(mMap, "CaptainAmerica", 37.3092293, -122.1136845);
-                */
             }
         });
     }

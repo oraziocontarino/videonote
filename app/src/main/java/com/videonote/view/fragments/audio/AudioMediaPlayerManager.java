@@ -13,12 +13,31 @@ public class AudioMediaPlayerManager {
     private static AudioMediaPlayerManager instance = null;
     private MediaPlayer mediaPlayer;
     private Context context;
-    private boolean dirty;
-    private boolean paused;
+
+    private enum MediaState {
+        INIT,
+        PLAYING,
+        PAUSED,
+        STOPPED,
+        COMPLETED
+    }
+    private MediaState currentState;
+
+
     private AudioMediaPlayerManager(Context context){
         this.context = context;
         mediaPlayer = new MediaPlayer();
-        dirty = false;
+        currentState = MediaState.INIT;
+
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+            @Override
+            public void onCompletion(MediaPlayer mp){
+                if(currentState == MediaState.INIT){
+                    return;
+                }
+                currentState = MediaState.COMPLETED;
+            }
+        });
     }
 
     public static AudioMediaPlayerManager getInstance(Context context){
@@ -32,41 +51,31 @@ public class AudioMediaPlayerManager {
     private void setContext(Context context){
         this.context = context;
     }
+
     public void startAudioPlayer(RecordDTO record) throws Exception{
         mediaPlayer.setDataSource(record.getFileName());
         mediaPlayer.prepare();
         mediaPlayer.start();
-        dirty = true;
+        currentState = MediaState.PLAYING;
     }
 
     public void pauseAudioPlayer(){
         mediaPlayer.pause();
-        paused = true;
+        currentState = MediaState.PAUSED;
     }
 
     public void resumeAudioPlayer(){
         mediaPlayer.start();
-        paused = false;
+        currentState = MediaState.PLAYING;
     }
     public void stopAudioPlayer(){
         mediaPlayer.stop();
         mediaPlayer.reset();   // You can reuse the object by going back to setAudioSource() step
-        dirty = false;
-        paused = false;
+        currentState = MediaState.STOPPED;
     }
     public void resetAudioPlayer(){
         mediaPlayer.reset();   // You can reuse the object by going back to setAudioSource() step
-        dirty = false;
-        paused = false;
-    }
-    public boolean isDirty(){
-        return dirty;
-    }
-    public boolean isPaused(){
-        return paused;
-    }
-    public void destroy(){
-        mediaPlayer.release(); // Now the object cannot be reused
+        currentState = MediaState.STOPPED;
     }
 
     public long getTime(){
@@ -88,8 +97,13 @@ public class AudioMediaPlayerManager {
         }
     }
 
-    public boolean isPlaying(){
-        return mediaPlayer.isPlaying();
+    public boolean isCompleted(){
+        return currentState == MediaState.COMPLETED;
     }
-
+    public boolean isPlaying(){
+        return currentState == MediaState.PLAYING;
+    }
+    public boolean isPaused(){
+        return currentState == MediaState.PAUSED;
+    }
 }

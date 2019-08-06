@@ -131,7 +131,11 @@ public class AudioPlayerController extends MediaPlayerUIController {
 
     @Override
     protected void updateHeaderTime(){
-        headerTime = audioMediaPlayerManager == null ? "": audioMediaPlayerManager.getFormattedTime()+" - "+statusLabel;
+        if(audioMediaPlayerManager == null || !(audioMediaPlayerManager.isPlaying() || audioMediaPlayerManager.isPaused())){
+            headerTime = "";
+        }else{
+            headerTime = audioMediaPlayerManager.getFormattedTime()+" - "+statusLabel;
+        }
     }
 
     @Override
@@ -140,7 +144,7 @@ public class AudioPlayerController extends MediaPlayerUIController {
             return;
         }
 
-        if(!audioMediaPlayerManager.isPlaying() && !audioMediaPlayerManager.isPaused() && audioMediaPlayerManager.isDirty()){
+        if(audioMediaPlayerManager.isCompleted()){
             nextNote = null;
             textAttachment.setText("");
             attachments.setVisibility(View.GONE);
